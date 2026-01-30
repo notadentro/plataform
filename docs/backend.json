@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user's profile information within the Nota Dentro platform.",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The unique user ID from Firebase Auth."
+        },
+        "username": {
+          "type": "string",
+          "description": "The user's unique username for the Nota Dentro platform."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's full name."
+        },
+        "profileImage": {
+          "type": "string",
+          "description": "URL of the user's profile image.",
+          "format": "uri"
+        },
+        "experience": {
+          "type": "number",
+          "description": "The user's total experience points (XP) on the platform."
+        },
+        "instagramProfile": {
+          "type": "string",
+          "description": "URL of the user's Instagram profile.",
+          "format": "uri"
+        },
+        "linkedInProfile": {
+          "type": "string",
+          "description": "URL of the user's LinkedIn profile.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "uid",
+        "username",
+        "name"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password"
+    ]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores public user profile information."
+    }
+  }
+}

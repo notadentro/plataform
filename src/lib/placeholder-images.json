@@ -1,0 +1,22 @@
+{
+  "placeholderImages": [
+    {
+      "id": "lesson-continue",
+      "description": "A person playing piano, viewed from above.",
+      "imageUrl": "https://images.unsplash.com/photo-1661240961955-da1b0b42e237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwaWFubyUyMGxlc3NvbnxlbnwwfHx8fDE3NjE2MDM4NzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "piano lesson"
+    },
+    {
+      "id": "landing-hero",
+      "description": "A person playing an acoustic guitar in a warmly lit room.",
+      "imageUrl": "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxndWl0YXJ8ZW58MHx8fHwxNzE2OTk3ODU1fDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "guitar music"
+    },
+    {
+      "id": "about-logo",
+      "description": "The 'Nota Dentro' logo with a white background.",
+      "imageUrl": "https://storage.googleapis.com/studio-assets/misc/Notadentro-logo-white-bg.png",
+      "imageHint": "company logo"
+    }
+  ]
+}
