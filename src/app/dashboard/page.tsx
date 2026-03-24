@@ -5,9 +5,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
-import { UserProgress } from '@/components/dashboard/user-progress';
-import { RecommendedLessons } from '@/components/dashboard/recommended-lessons';
-import { AchievementIcon } from '@/components/dashboard/achievement-icon';
+import { UserProgress } from '@/modules/dashboard/components/user-progress';
+import { RecommendedLessons } from '@/modules/dashboard/components/recommended-lessons';
+import { AchievementIcon } from '@/modules/dashboard/components/achievement-icon';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 
