@@ -18,3 +18,9 @@
 - Ícones minimalistas e intuitivos, com estilo moderno, representando elementos musicais (notas, claves, instrumentos).
 - Layout claro e organizado, com fácil navegação e hierarquia visual para guiar o usuário pelo conteúdo.
 - Animações sutis e agradáveis ao interagir com elementos e ao completar tarefas, reforçando o aspecto divertido e motivador.
+
+## Personalização do aprendizado:
+
+Análise Determinística: O sistema monitora erros e acertos por categoria (Altura, Intensidade, etc.) via banco de dados para sugerir revisões automáticas.
+
+Maestro Tutor (IA): O Genkit/Gemini atua como um tutor sob demanda, oferecendo explicações alternativas e tirando dúvidas específicas quando solicitado pelo aluno.
