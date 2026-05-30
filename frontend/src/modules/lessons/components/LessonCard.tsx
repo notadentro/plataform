@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Lock, Play, Music } from 'lucide-react';
 import { Lesson } from '@/types/lesson';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 interface LessonCardProps {
   lesson: Lesson;
@@ -31,15 +32,17 @@ export function LessonCard({ lesson }: LessonCardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-4">
-        <Button 
-          disabled={isLocked}
-          className={cn(
-            "w-full gap-2 font-medium transition-colors",
-            !isLocked ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "bg-muted text-muted-foreground"
-          )}
-        >
-          {isLocked ? 'Bloqueado' : <><Play className="size-4 fill-current" /> Iniciar Lição</>}
-        </Button>
+        <Link href={isLocked ? '#' : `/lesson/${lesson.id}`} className="w-full">
+          <Button 
+            disabled={isLocked}
+            className={cn(
+              "w-full gap-2 font-medium transition-colors",
+              !isLocked ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "bg-muted text-muted-foreground"
+            )}
+          >
+            {isLocked ? 'Bloqueado' : <><Play className="size-4 fill-current" /> Iniciar Lição</>}
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );

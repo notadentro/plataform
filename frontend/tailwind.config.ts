@@ -8,6 +8,7 @@ export default {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/modules/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     container: {
@@ -113,10 +114,15 @@ export default {
             height: '0',
           },
         },
+        'sweep': {
+          '0%': { left: '-100px' },
+          '100%': { left: '100%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'sweep': 'sweep 2s ease-in-out infinite',
       },
     },
   },
