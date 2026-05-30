@@ -5,5 +5,11 @@
   "workspaces": [
     "frontend",
     "backend"
-  ]
+  ],
+  "scripts": {
+    "install:all": "npm install",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "dev": "npm run dev -w frontend"
+  }
 }

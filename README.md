@@ -1,69 +1,78 @@
 # Nota Dentro - Plataforma de Ensino Musical
 
-Uma plataforma gamificada para aprendizado de teoria musical baseada no livro "Elementos de Teoria Musical" de Esther Scliar.
+Uma plataforma gamificada para aprendizado de teoria musical baseada no livro "Elementos de Teoria Musical" de Esther Scliar. O projeto está estruturado como um **Monorepo** utilizando **npm Workspaces**.
 
-## 🚀 Configuração Inicial
+---
 
-### 1. Configuração do Firebase
+## 📁 Estrutura do Monorepo
 
-1. Acesse o [Firebase Console](https://console.firebase.google.com/)
-2. Selecione o projeto `studio-2351776517-dea39`
-3. Vá em **Configurações do Projeto** > **Geral** > **Seus apps**
-4. Copie as configurações da Web App
+O projeto está dividido em duas partes principais:
 
-### 2. Variáveis de Ambiente
+*   **`frontend/`**: Aplicação cliente construída com Next.js 15, React 18, Tailwind CSS, shadcn/ui e Genkit.
+*   **`backend/`**: API de suporte e serviços inteligentes construída com Express, TypeScript, ts-node e Genkit.
 
-1. Copie o arquivo de exemplo:
-   ```bash
-   cp .env.example .env.local
-   ```
-
-2. Preencha o `.env.local` com suas configurações reais do Firebase:
-   ```env
-   NEXT_PUBLIC_FIREBASE_API_KEY=sua_api_key_aqui
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=studio-2351776517-dea39.firebaseapp.com
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=studio-2351776517-dea39
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=studio-2351776517-dea39.appspot.com
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=seu_sender_id
-   NEXT_PUBLIC_FIREBASE_APP_ID=seu_app_id
-   ```
-
-### 3. Instalação e Execução
-
-```bash
-# Instalar dependências
-npm install
-
-# Executar em modo desenvolvimento
-npm run dev
-
-# Build para produção
-npm run build
-
-# Executar em produção
-npm start
-```
-
-## 📁 Estrutura do Projeto
-
-- `src/app/` - Páginas Next.js App Router
-- `src/components/` - Componentes reutilizáveis
-- `src/modules/` - Módulos organizados por domínio
-- `src/firebase/` - Configuração e hooks do Firebase
-- `src/types/` - Definições TypeScript
-- `src/constants/` - Constantes da aplicação
-
-## 🎵 Currículo Scliar
-
-O conteúdo é baseado nos 30 capítulos do livro "Elementos de Teoria Musical" de Esther Scliar, organizado em módulos progressivos.
+---
 
 ## 🛠️ Tecnologias
 
-- **Next.js 15** - Framework React
-- **Firebase** - Backend e autenticação
-- **Tailwind CSS** - Estilização
-- **TypeScript** - Tipagem
-- **shadcn/ui** - Componentes UI
+### Frontend
+- **Next.js 15 & React 18** - Framework e biblioteca de UI
+- **Tailwind CSS & shadcn/ui** - Estilização moderna e componentes ricos
+- **TypeScript** - Tipagem estática segura
+- **Firebase** - Integração de autenticação, banco de dados (Firestore) e hospedagem
+- **Genkit AI** - Integrações com IA para aprendizado interativo
+
+### Backend
+- **Express & Node.js** - Servidor web leve e flexível
+- **TypeScript & ts-node** - Desenvolvimento tipado no backend
+- **Genkit AI & Google GenAI** - Orquestração de modelos de inteligência artificial
+
+---
+
+## 🚀 Configuração e Execução Inicial
+
+Por estarmos usando **npm Workspaces**, todas as dependências e scripts podem ser executados a partir da **raiz do projeto**!
+
+### 1. Instalar Dependências (Tudo de uma vez)
+Na pasta raiz (`c:\Users\carol\Desktop\plataform`), execute:
+```bash
+npm install
+```
+> **Nota:** Isso instalará de forma inteligente todas as dependências do frontend, backend e raiz em uma única pasta `node_modules` centralizada.
+
+### 2. Configurar Variáveis de Ambiente
+Tanto o frontend quanto o backend possuem seus arquivos de configuração:
+- **Frontend**: configure o arquivo `.env` (ou `.env.local`) dentro da pasta `frontend/` com as suas chaves do Firebase e do Genkit.
+- **Backend**: configure o arquivo `.env` dentro da pasta `backend/` com as chaves necessárias.
+
+---
+
+## 🎵 Executando o Projeto
+
+Você pode rodar os ambientes de desenvolvimento diretamente da **raiz do projeto** usando os atalhos abaixo:
+
+### Executar o Frontend (Next.js)
+```bash
+npm run dev
+```
+*(Atalho para `npm run dev -w frontend` — o frontend roda por padrão na porta `9002`)*
+
+### Executar o Backend (Express API)
+Abra um novo terminal na raiz e execute:
+```bash
+npm run dev:backend
+```
+*(Atalho para `npm run dev -w backend`)*
+
+---
+
+## 🎵 Diretrizes de Ensino e Currículo Musical (Esther Scliar)
+
+O Nota Dentro baseia sua progressão pedagógica rigorosamente nos 30 capítulos do clássico **"Elementos de Teoria Musical"** de Esther Scliar. A plataforma gamifica conceitos complexos como:
+- Figuras de duração e metrificação rítmica.
+- Estruturas de escalas heptatônicas e diatônicas.
+- Classificação e inversão de intervalos.
+- Formação de tríades, tétrades e funções tonais.
 
 ---
 
