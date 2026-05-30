@@ -46,15 +46,7 @@ export default function DashboardPage() {
                         <h2 className="text-2xl font-bold font-headline mb-4 text-center md:text-left">Sua Jornada Scliar</h2>
                         <div className="bg-brand-black dark:bg-brand-black/50 py-12 rounded-3xl border-2 border-brand-graphite shadow-2xl overflow-hidden flex justify-center min-h-[300px]">
                             {isHydrated ? (
-                                <TrailMap 
-                                    lessons={lessonsWithStatus} 
-                                    onLessonClick={(lesson) => {
-                                        // Para a Fase 6: Completar a lição e destravar a próxima
-                                        const currentIndex = SCLIAR_CURRICULUM.findIndex(l => l.id === lesson.id);
-                                        const nextLesson = SCLIAR_CURRICULUM[currentIndex + 1];
-                                        completeLesson(lesson.id, nextLesson?.id, 50);
-                                    }}
-                                />
+                                <TrailMap lessons={lessonsWithStatus} />
                             ) : null}
                         </div>
                     </section>

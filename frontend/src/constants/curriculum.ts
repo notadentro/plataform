@@ -23,9 +23,15 @@ export const SCLIAR_CURRICULUM: Lesson[] = [
         title: 'Teste rápido',
         data: {
           question: 'Segundo Esther Scliar, qual é a matéria-prima da música?',
-          options: ['O silêncio', 'Os instrumentos', 'O som', 'A partitura'],
+          options: ['O silêncio', 'Os instrumentos', 'O som', 'A partitura', 'O ritmo'],
           correctAnswer: 'O som',
-          explanation: 'O som é a base e a matéria-prima da música. É através dele que a arte musical se materializa.'
+          explanation: 'O som é a base e a matéria-prima da música. É através dele que a arte musical se materializa.',
+          wrongExplanations: {
+            'O silêncio': 'O silêncio faz parte da música, mas Scliar define O Som como a matéria-prima onde o silêncio atua.',
+            'Os instrumentos': 'Instrumentos são ferramentas que produzem a matéria-prima (o som).',
+            'A partitura': 'A partitura é apenas a representação gráfica (escrita) da música, não a sua essência.',
+            'O ritmo': 'O ritmo é como organizamos o tempo, mas precisamos do Som para preencher esse tempo.'
+          }
         }
       },
       {
@@ -46,10 +52,17 @@ export const SCLIAR_CURRICULUM: Lesson[] = [
             'Agudo, Grave, Forte e Fraco',
             'Altura, Duração, Intensidade e Timbre',
             'Ritmo, Melodia, Harmonia e Timbre',
-            'Semibreve, Mínima, Semínima e Colcheia'
+            'Semibreve, Mínima, Semínima e Colcheia',
+            'Volume, Tom, Timbre e Ritmo'
           ],
           correctAnswer: 'Altura, Duração, Intensidade e Timbre',
-          explanation: 'Estas são as propriedades físicas do som descritas por Scliar. Agudo/Grave são tipos de Altura, não propriedades independentes.'
+          explanation: 'Estas são as propriedades físicas do som descritas por Scliar. Agudo/Grave são tipos de Altura, não propriedades independentes.',
+          wrongExplanations: {
+            'Agudo, Grave, Forte e Fraco': 'Agudo e Grave são subdivisões da Altura. Forte e Fraco são subdivisões da Intensidade. Não são propriedades raízes.',
+            'Ritmo, Melodia, Harmonia e Timbre': 'Ritmo, melodia e harmonia são elementos da música (como organizamos o som), não propriedades físicas do som isolado.',
+            'Semibreve, Mínima, Semínima e Colcheia': 'Essas são figuras de valor (representam a duração na partitura), não as propriedades físicas do som.',
+            'Volume, Tom, Timbre e Ritmo': 'Volume e Tom são termos populares (equivalentes a Intensidade e Altura), e Ritmo não é propriedade física do som.'
+          }
         }
       },
       {
@@ -59,7 +72,8 @@ export const SCLIAR_CURRICULUM: Lesson[] = [
         data: {
           statement: 'A "Altura" é a propriedade que define se um som é forte ou fraco (o seu "volume").',
           isTrue: false,
-          explanation: 'Falso! O volume é definido pela Intensidade. A Altura define se o som é Grave ou Agudo.'
+          explanation: 'A Altura define se o som é Grave ou Agudo. O volume é definido pela Intensidade.',
+          wrongExplanation: 'Se você marcou "Verdadeiro", confundiu com o conceito popular. Popularmente dizemos "aumente a altura do rádio", mas em Teoria Musical, isso se chama Intensidade!'
         }
       }
     ]

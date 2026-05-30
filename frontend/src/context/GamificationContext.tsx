@@ -13,6 +13,7 @@ interface GamificationState {
 interface GamificationContextType extends GamificationState {
   completeLesson: (lessonId: string, nextLessonId?: string, xpReward?: number) => void;
   loseLife: () => void;
+  restoreLives: () => void;
   isHydrated: boolean; // Tells us if the state has loaded from LocalStorage
 }
 
@@ -90,8 +91,15 @@ export function GamificationProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const restoreLives = () => {
+    setState((prev) => ({
+      ...prev,
+      lives: 5
+    }));
+  };
+
   return (
-    <GamificationContext.Provider value={{ ...state, completeLesson, loseLife, isHydrated }}>
+    <GamificationContext.Provider value={{ ...state, completeLesson, loseLife, restoreLives, isHydrated }}>
       {children}
     </GamificationContext.Provider>
   );

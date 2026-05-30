@@ -18,6 +18,7 @@ export interface QuizStep {
   options: string[];
   correctAnswer: string;
   explanation: string;
+  wrongExplanations?: Record<string, string>;
 }
 
 /**
@@ -27,6 +28,7 @@ export interface TrueFalseStep {
   statement: string;
   isTrue: boolean;
   explanation: string;
+  wrongExplanation?: string;
 }
 
 /**
