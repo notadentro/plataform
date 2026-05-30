@@ -8,6 +8,7 @@ export default {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/modules/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     container: {
@@ -19,11 +20,27 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-body)', 'sans-serif'],
-        heading: ['var(--font-heading)', 'sans-serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
+        headline: ['var(--font-nunito)', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
+        brand: {
+          gold:         '#C9A811',
+          'gold-hover': '#A88A0D',
+          'gold-light': '#EDD033',
+          black:        '#1A1A1A',
+          white:        '#F8F6F0',
+          graphite:     '#3A3A3A',
+          gray:         '#6B6B6B',
+          sand:         '#E8E6DF',
+        },
+        system: {
+          success: '#2D8A5C',
+          error:   '#C0392B',
+          warning: '#E67E22',
+          info:    '#5B9BD5',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -97,10 +114,15 @@ export default {
             height: '0',
           },
         },
+        'sweep': {
+          '0%': { left: '-100px' },
+          '100%': { left: '100%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'sweep': 'sweep 2s ease-in-out infinite',
       },
     },
   },
