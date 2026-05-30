@@ -6,7 +6,7 @@ export const SCLIAR_CURRICULUM: Lesson[] = [
     slug: 'propriedades-do-som',
     title: 'O Som e Suas Propriedades',
     description: 'A matéria-prima da música e suas quatro qualidades fundamentais: Altura, Duração, Intensidade e Timbre.',
-    status: 'available',
+    status: 'completed',
     module: 1,
     steps: [
       {
@@ -121,6 +121,51 @@ export const SCLIAR_CURRICULUM: Lesson[] = [
     slug: 'duracao-e-intensidade',
     title: 'Duração e Intensidade',
     description: 'Descubra a diferença entre sons longos/curtos e fortes/fracos.',
+    status: 'locked',
+    module: 1,
+    steps: []
+  },
+  {
+    id: '4',
+    slug: 'timbre-a-cor-do-som',
+    title: 'Timbre: A Cor do Som',
+    description: 'Como nosso ouvido diferencia um violino de um piano tocando a mesma nota?',
+    status: 'locked',
+    module: 1,
+    steps: []
+  },
+  {
+    id: '6',
+    slug: 'ritmo-e-metrificacao',
+    title: 'Ritmo e Metrificação',
+    description: 'Como o som se organiza no tempo.',
+    status: 'locked',
+    module: 1,
+    steps: []
+  },
+  {
+    id: '7',
+    slug: 'figuras-musicais',
+    title: 'Figuras Musicais',
+    description: 'Os símbolos que representam a duração.',
+    status: 'locked',
+    module: 1,
+    steps: []
+  },
+  {
+    id: '8',
+    slug: 'pulsacao',
+    title: 'Pulsação',
+    description: 'O coração da música.',
+    status: 'locked',
+    module: 1,
+    steps: []
+  },
+  {
+    id: '5',
+    slug: 'prova-modulo-1',
+    title: 'Desafio do Módulo 1',
+    description: 'Teste final do primeiro capítulo de Esther Scliar.',
     status: 'locked',
     module: 1,
     steps: []

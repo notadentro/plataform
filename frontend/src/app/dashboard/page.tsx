@@ -1,7 +1,7 @@
 'use client';
 
 import { SCLIAR_CURRICULUM } from '@/constants/curriculum';
-import { LessonCard } from '@/modules/lessons/components/LessonCard';
+import { TrailMap } from '@/modules/dashboard/components/TrailMap';
 import { UserProgress } from '@/modules/dashboard/components/user-progress';
 import { RecommendedLessons } from '@/modules/dashboard/components/recommended-lessons';
 import { AchievementIcon } from '@/modules/dashboard/components/achievement-icon';
@@ -19,7 +19,7 @@ export default function DashboardPage() {
 
     return (
         <div className="p-4 md:p-6 space-y-8 bg-background min-h-screen font-body">
-            <header>
+            <header className="text-center md:text-left">
                 <h1 className="text-3xl font-bold font-headline text-foreground">
                     Olá, {user?.displayName?.split(' ')[0] || 'Aluno'}! 👋
                 </h1>
@@ -27,13 +27,11 @@ export default function DashboardPage() {
             </header>
 
             <div className="grid gap-8 lg:grid-cols-3">
-                <div className="lg:col-span-2 space-y-8">
-                    <section>
-                        <h2 className="text-2xl font-bold font-headline mb-4">Sua Jornada Scliar</h2>
-                        <div className="grid gap-4 md:grid-cols-2">
-                            {SCLIAR_CURRICULUM.map((lesson) => (
-                                <LessonCard key={lesson.id} lesson={lesson} />
-                            ))}
+                <div className="lg:col-span-2 space-y-8 flex flex-col items-center overflow-hidden">
+                    <section className="w-full">
+                        <h2 className="text-2xl font-bold font-headline mb-4 text-center md:text-left">Sua Jornada Scliar</h2>
+                        <div className="bg-brand-black dark:bg-brand-black/50 py-12 rounded-3xl border-2 border-brand-graphite shadow-2xl overflow-hidden flex justify-center">
+                            <TrailMap lessons={SCLIAR_CURRICULUM} />
                         </div>
                     </section>
 
