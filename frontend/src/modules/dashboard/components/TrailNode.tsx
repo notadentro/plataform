@@ -53,12 +53,12 @@ export function TrailNode({ status, title, onClick, isFirst, titlePosition = 'bo
       
       {/* Permanent Title Beside or Below Node */}
       <div className={cn(
-        "absolute whitespace-nowrap text-sm font-bold bg-background/80 px-3 py-1.5 rounded-xl border border-brand-graphite/30 shadow-md",
+        "absolute w-max max-w-[120px] text-center text-xs md:text-sm font-bold bg-background/90 px-3 py-1.5 rounded-xl border border-brand-graphite/30 shadow-md leading-tight",
         isLocked ? "text-brand-gray" : "text-brand-white",
-        titlePosition === 'bottom' && "-bottom-10",
-        titlePosition === 'top' && "-top-12",
-        titlePosition === 'left' && "right-[110%] top-1/2 -translate-y-1/2",
-        titlePosition === 'right' && "left-[110%] top-1/2 -translate-y-1/2"
+        titlePosition === 'bottom' && "top-[120%] mt-2",
+        titlePosition === 'top' && "bottom-[120%] mb-2",
+        titlePosition === 'left' && "right-[120%] top-1/2 -translate-y-1/2",
+        titlePosition === 'right' && "left-[120%] top-1/2 -translate-y-1/2"
       )}>
         {title}
         

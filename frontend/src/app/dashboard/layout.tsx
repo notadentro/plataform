@@ -36,7 +36,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <GamificationProvider>
-      <div className="min-h-screen flex flex-col bg-background relative">
+      <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
         <AppHeader />
         <main className="flex-1 w-full max-w-7xl mx-auto">{children}</main>
       </div>

@@ -26,7 +26,7 @@ export default function DashboardPage() {
     ];
 
     return (
-        <div className="p-4 md:p-8 space-y-8 min-h-[calc(100vh-4rem)] font-body">
+        <div className="p-4 md:p-8 space-y-8 min-h-[calc(100vh-4rem)] font-body overflow-x-hidden">
             <header className="text-center md:text-left">
                 <h1 className="text-3xl font-bold font-headline text-foreground">
                     Olá, {user?.displayName?.split(' ')[0] || 'Aluno'}! 👋
@@ -70,7 +70,7 @@ export default function DashboardPage() {
                             <CardTitle className="font-headline text-lg">Conquistas Recentes</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="flex justify-around gap-4">
+                            <div className="flex flex-wrap justify-around gap-4">
                                 {achievements.map(ach => (
                                     <AchievementIcon key={ach.title} title={ach.title} description={ach.description} />
                                 ))}

@@ -13,11 +13,11 @@ export function CourseMapWrapper({ course }: { course: Course }) {
     <div className="space-y-16">
       {course.modules.map((module, mIndex) => {
         // Map lessons and inject status
-        const lessonsWithStatus: Lesson[] = module.lessons.map(lesson => {
+        const lessonsWithStatus: Lesson[] = module.lessons.map((lesson, lIndex) => {
           let status: 'completed' | 'available' | 'locked' = 'locked';
           if (completedLessons.includes(lesson.id)) {
             status = 'completed';
-          } else if (unlockedLessons.includes(lesson.id)) {
+          } else if (unlockedLessons.includes(lesson.id) || (mIndex === 0 && lIndex === 0)) {
             status = 'available';
           }
           return { ...lesson, status };

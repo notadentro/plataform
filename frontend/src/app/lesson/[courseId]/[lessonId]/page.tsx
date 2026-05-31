@@ -19,13 +19,18 @@ export default function LessonPage() {
     for (const trail of DATABASE) {
       for (const course of trail.courses) {
         if (course.id === courseId) {
-          for (const module of course.modules) {
+          for (let mIndex = 0; mIndex < course.modules.length; mIndex++) {
+            const module = course.modules[mIndex];
             const lessonIndex = module.lessons.findIndex(l => l.id === lessonId);
+            
             if (lessonIndex !== -1) {
               foundLesson = module.lessons[lessonIndex];
               // Try to find next lesson in the same module
               if (lessonIndex < module.lessons.length - 1) {
                 nextLessonId = module.lessons[lessonIndex + 1].id;
+              } else if (mIndex < course.modules.length - 1) {
+                // If it's the last lesson in the module, the next lesson is the first of the next module
+                nextLessonId = course.modules[mIndex + 1].lessons[0]?.id;
               }
               break;
             }

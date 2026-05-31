@@ -7,6 +7,7 @@ import { useGamification } from '@/context/GamificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import confetti from 'canvas-confetti';
 
 interface LessonEngineProps {
   lesson: Lesson;
@@ -51,6 +52,18 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
         handleNext();
     }
   }, [currentStep, showVictory]);
+
+  // Trigger fireworks when victory is achieved!
+  React.useEffect(() => {
+    if (showVictory) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#A88A0D', '#F2D349', '#2D8A5C', '#ffffff']
+      });
+    }
+  }, [showVictory]);
 
   if (!currentStep && !showVictory) return null;
 
@@ -100,9 +113,9 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
           <X size={24} />
         </button>
         
-        <div className="flex-1 h-4 bg-brand-graphite/10 dark:bg-brand-graphite/30 rounded-full overflow-hidden">
+        <div className="flex-1 h-4 bg-brand-graphite/10 dark:bg-brand-graphite/30 rounded-full relative">
           <motion.div 
-            className="h-full bg-[#2D8A5C] rounded-full"
+            className="absolute left-0 top-0 h-full bg-[#2D8A5C] rounded-full shadow-[0_0_15px_#2D8A5C]"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.5, ease: "easeOut" }}
@@ -242,7 +255,7 @@ function QuizView({ data, isCompleted, onSuccess, onFail }: { data: QuizStep, is
             let btnClass = "border-2 border-brand-graphite/20 bg-background text-brand-black dark:text-brand-white hover:bg-brand-graphite/5 shadow-[0_2px_0_0_rgba(0,0,0,0.1)]";
             
             if (isThisCorrect) {
-              btnClass = "border-[#2D8A5C] bg-[#2D8A5C]/10 text-[#2D8A5C] shadow-none";
+              btnClass = "border-[#2D8A5C] bg-[#2D8A5C]/10 text-[#2D8A5C] shadow-[0_0_20px_#2D8A5C] animate-pulse border-4";
             } else if (isThisSelected && isWrong) {
               btnClass = "border-red-500 bg-red-500/10 text-red-500 shadow-none";
             }
@@ -340,7 +353,7 @@ function TrueFalseView({ data, isCompleted, onSuccess, onFail }: { data: TrueFal
             disabled={isCompleted}
             className={cn(
               "p-6 rounded-2xl text-xl font-bold text-center transition-all border-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]",
-              isCompleted && data.isTrue ? "border-[#2D8A5C] bg-[#2D8A5C] text-white shadow-none" 
+              isCompleted && data.isTrue ? "border-[#2D8A5C] bg-[#2D8A5C] text-white shadow-[0_0_20px_#2D8A5C] animate-pulse border-4" 
               : selected === true && isWrong ? "border-red-500 bg-red-500 text-white shadow-none"
               : "border-brand-graphite/20 bg-background hover:bg-brand-graphite/5 text-brand-black dark:text-brand-white"
             )}
@@ -354,7 +367,7 @@ function TrueFalseView({ data, isCompleted, onSuccess, onFail }: { data: TrueFal
             disabled={isCompleted}
             className={cn(
               "p-6 rounded-2xl text-xl font-bold text-center transition-all border-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]",
-              isCompleted && !data.isTrue ? "border-[#2D8A5C] bg-[#2D8A5C] text-white shadow-none" 
+              isCompleted && !data.isTrue ? "border-[#2D8A5C] bg-[#2D8A5C] text-white shadow-[0_0_20px_#2D8A5C] animate-pulse border-4" 
               : selected === false && isWrong ? "border-red-500 bg-red-500 text-white shadow-none"
               : "border-brand-graphite/20 bg-background hover:bg-brand-graphite/5 text-brand-black dark:text-brand-white"
             )}

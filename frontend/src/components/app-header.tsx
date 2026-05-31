@@ -26,7 +26,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:px-6">
       
       {/* Esquerda: Mobile Menu Hambúrguer */}
-      <div className="flex md:hidden items-center">
+      <div className="flex flex-1 md:hidden items-center">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden">
@@ -38,12 +38,11 @@ export function AppHeader() {
             <SheetHeader>
                <SheetTitle className="sr-only">Navegação</SheetTitle>
             </SheetHeader>
-            <div className="flex flex-col gap-6 pt-4">
-              <Link href="/dashboard" className="flex items-center gap-2 mb-4">
-                <Logo className="size-6 text-primary" />
-                <span className="font-headline text-xl font-bold">Nota Dentro</span>
+            <div className="flex flex-col gap-6 pt-4 h-full">
+              <Link href="/dashboard" className="flex items-center gap-2 mb-4 p-4">
+                <Logo className="w-28 h-auto" />
               </Link>
-              <nav className="flex flex-col gap-2">
+              <nav className="flex flex-col gap-2 flex-1">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
@@ -58,6 +57,28 @@ export function AppHeader() {
                   </Link>
                 ))}
               </nav>
+              
+              {isHydrated && (
+                <div className="flex justify-between items-center bg-secondary/50 rounded-lg p-4 mt-auto mb-4">
+                  {/* Vidas */}
+                  <div className={`flex flex-col items-center gap-1 font-bold ${lives > 0 ? 'text-red-500' : 'text-gray-400'}`}>
+                    <Heart size={20} className={lives > 0 ? "fill-red-500" : "fill-transparent"} />
+                    <span className="text-xs">{lives}</span>
+                  </div>
+
+                  {/* Ofensiva */}
+                  <div className={`flex flex-col items-center gap-1 font-bold ${streak > 0 ? 'text-orange-500' : 'text-gray-400'}`}>
+                    <Flame size={20} className={streak > 0 ? "fill-orange-500" : "fill-transparent"} />
+                    <span className="text-xs">{streak}</span>
+                  </div>
+                  
+                  {/* XP */}
+                  <div className="flex flex-col items-center gap-1 text-[#2D8A5C] font-bold">
+                    <Star size={20} className="fill-[#2D8A5C]" />
+                    <span className="text-xs">{xp}</span>
+                  </div>
+                </div>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -82,9 +103,8 @@ export function AppHeader() {
 
       {/* Centro: Logo */}
       <div className="flex justify-center flex-1 md:flex-none">
-        <Link href="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105">
-          <Logo className="size-6 text-primary" />
-          <span className="font-headline text-xl font-bold hidden sm:inline-block">Nota Dentro</span>
+        <Link href="/dashboard" className="flex items-center gap-2 transition-transform hover:scale-105 p-2 md:p-3">
+          <Logo className="w-28 md:w-36 h-auto" />
         </Link>
       </div>
 
