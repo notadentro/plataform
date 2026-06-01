@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.post('/api/contact', async (req, res) => {
   try {
-    const { name, email, subject, message } = req.body;
+    const { name, email, whatsapp, subject, message } = req.body;
 
     if (!name || !email || !subject || !message) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
@@ -36,11 +36,11 @@ app.post('/api/contact', async (req, res) => {
 
     // Disparar o e-mail
     await transporter.sendMail({
-      from: \`"\${name}" <\${process.env.SMTP_USER}>\`, // Zoho exige que o remetente seja a própria conta autenticada
+      from: `"${name}" <${process.env.SMTP_USER}>`, // Zoho exige que o remetente seja a própria conta autenticada
       replyTo: email, // Quando responder, vai para o e-mail do usuário
       to: toEmail,
-      subject: \`[NotaDentro Form] Nova mensagem de \${name}\`,
-      text: \`Nome: \${name}\\nEmail: \${email}\\nAssunto: \${subject}\\n\\nMensagem:\\n\${message}\`,
+      subject: `[NotaDentro Form] Nova mensagem de ${name}`,
+      text: `Nome: ${name}\nEmail: ${email}\nWhatsApp: ${whatsapp || 'Não informado'}\nAssunto: ${subject}\n\nMensagem:\n${message}`,
     });
 
     res.status(200).json({ success: true, message: 'Contato enviado com sucesso' });
