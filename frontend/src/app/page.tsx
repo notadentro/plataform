@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -34,9 +34,17 @@ const passwordResetSchema = z.object({
   email: z.string().email({ message: 'Email inválido' }),
 });
 
+const contactSchema = z.object({
+  name: z.string().min(1, { message: 'Nome é obrigatório' }),
+  email: z.string().email({ message: 'Email inválido' }),
+  subject: z.string().min(1, { message: 'Assunto é obrigatório' }),
+  message: z.string().min(10, { message: 'Mensagem deve ter pelo menos 10 caracteres' }),
+});
+
 type SignupFormValues = z.infer<typeof signupSchema>;
 type LoginFormValues = z.infer<typeof loginSchema>;
 type PasswordResetFormValues = z.infer<typeof passwordResetSchema>;
+type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function LandingPage() {
   const { toast } = useToast();
@@ -72,6 +80,18 @@ export default function LandingPage() {
       email: '',
     },
   });
+
+  const contactForm = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: 'suporte',
+      message: '',
+    },
+  });
+
+  const [isSendingContact, setIsSendingContact] = useState(false);
 
   const onSignupSubmit = async (data: SignupFormValues) => {
     try {
@@ -123,6 +143,31 @@ export default function LandingPage() {
     }
   };
 
+  const onContactSubmit = async (data: ContactFormValues) => {
+    setIsSendingContact(true);
+    try {
+      const res = await fetch('http://localhost:4000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('Erro ao enviar');
+      toast({
+        title: 'Mensagem enviada!',
+        description: 'Recebemos seu contato e retornaremos em breve.',
+      });
+      contactForm.reset();
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao enviar mensagem',
+        description: 'Ocorreu um problema ao enviar o contato. Tente novamente.',
+      });
+    } finally {
+      setIsSendingContact(false);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <header className="px-4 lg:px-6 h-16 flex items-center absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/50 to-transparent">
@@ -139,6 +184,11 @@ export default function LandingPage() {
           <Button variant="ghost" className="text-white hover:bg-white/10 hover:text-white" asChild>
             <Link href="#how-it-works" prefetch={false}>
               Como Funciona
+            </Link>
+          </Button>
+          <Button variant="ghost" className="text-white hover:bg-white/10 hover:text-white" asChild>
+            <Link href="/blog" prefetch={false}>
+              Blog
             </Link>
           </Button>
           <Dialog>
@@ -432,6 +482,102 @@ export default function LandingPage() {
                     Desbloqueie badges e acompanhe seu progresso musical.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50 border-t">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Fale Conosco</h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Tem alguma dúvida, sugestão ou quer ser um parceiro? Mande uma mensagem!
+                </p>
+              </div>
+            </div>
+            
+            <div className="mx-auto max-w-2xl bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <Form {...contactForm}>
+                <form onSubmit={contactForm.handleSubmit(onContactSubmit)} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={contactForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nome Completo</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Seu nome" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={contactForm.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>E-mail</FormLabel>
+                          <FormControl>
+                            <Input placeholder="seu@email.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={contactForm.control}
+                    name="subject"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Assunto</FormLabel>
+                        <FormControl>
+                          <select 
+                            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            {...field}
+                          >
+                            <option value="suporte">Dúvida / Suporte</option>
+                            <option value="contato">Parceria / Contato Comercial</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={contactForm.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mensagem</FormLabel>
+                        <FormControl>
+                          <textarea 
+                            className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Como podemos te ajudar?" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full" disabled={isSendingContact}>
+                    {isSendingContact ? 'Enviando...' : 'Enviar Mensagem'}
+                  </Button>
+                </form>
+              </Form>
+            </div>
+            
+            <div className="mt-12 text-center text-sm text-gray-500 flex flex-col items-center gap-2">
+              <p>Você também pode nos contatar diretamente pelos e-mails:</p>
+              <div className="flex gap-4">
+                <a href="mailto:suporte@notadentro.com" className="font-semibold text-primary hover:underline">suporte@notadentro.com</a>
+                <span className="text-gray-300">|</span>
+                <a href="mailto:contato@notadentro.com" className="font-semibold text-primary hover:underline">contato@notadentro.com</a>
               </div>
             </div>
           </div>
