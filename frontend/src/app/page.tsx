@@ -440,9 +440,10 @@ export default function LandingPage() {
                 
                 <motion.div variants={fadeUpItem} className="pt-6 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500">
                   <div className="flex -space-x-3">
-                    {[1,2,3,4].map((i) => (
-                      <div key={i} className={`w-10 h-10 rounded-full border-2 border-black bg-zinc-800 flex items-center justify-center z-${10-i} shadow-sm`}>
-                        <CircleUser className="w-5 h-5 text-zinc-400" />
+                    {["https://randomuser.me/api/portraits/women/44.jpg", "https://randomuser.me/api/portraits/men/32.jpg", "https://randomuser.me/api/portraits/women/68.jpg", "https://randomuser.me/api/portraits/men/46.jpg"].map((src, i) => (
+                      <div key={i} className={`relative w-10 h-10 rounded-full border-2 border-black bg-zinc-800 flex items-center justify-center z-${10-i} shadow-sm overflow-hidden`}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt={`Estudante ${i+1}`} className="object-cover w-full h-full" />
                       </div>
                     ))}
                   </div>
