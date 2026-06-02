@@ -2,7 +2,16 @@
 
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  User as FirebaseUser
+} from 'firebase/auth';
+import { db, auth } from '@/lib/firebase';
 
 interface User {
   uid: string;
@@ -19,7 +28,9 @@ interface User {
 interface UserContextType {
   user: User | null;
   isUserLoading: boolean;
-  login: (name: string, username: string, email: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (name: string, username: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   addXP: (amount: number) => Promise<void>;
 }
@@ -27,74 +38,94 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>({
-    uid: 'demo-user-123',
-    name: 'Aluno Demo',
-    displayName: 'Aluno Demo',
-    username: 'aluno_demo',
-    email: 'aluno@demo.com',
-    profileImage: 'https://picsum.photos/seed/aluno_demo/200',
-    experience: 0,
-    instagramProfile: '',
-    linkedInProfile: '',
-  });
-  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
-  // Sync with Firestore when user changes
   useEffect(() => {
-    async function syncUserWithDb() {
-      if (!user?.uid) return;
+    // Fica escutando se alguém entrou ou saiu da "portaria" do Firebase
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setIsUserLoading(true);
       
-      try {
-        const userRef = doc(db, 'users', user.uid);
+      if (firebaseUser) {
+        // Usuário está logado. Vamos buscar os dados dele no nosso Firestore
+        const userRef = doc(db, 'users', firebaseUser.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          // Update local state with DB experience
           const data = userSnap.data();
-          if (data.experience !== undefined && data.experience !== user.experience) {
-            setUser(prev => prev ? { ...prev, experience: data.experience } : null);
-          }
+          setUser({
+            uid: firebaseUser.uid,
+            name: data.name || firebaseUser.displayName || 'Aluno',
+            displayName: data.displayName || data.name || firebaseUser.displayName || 'Aluno',
+            username: data.username || `user_${firebaseUser.uid.substring(0,5)}`,
+            email: firebaseUser.email || data.email || '',
+            profileImage: data.profileImage || firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/200`,
+            experience: data.experience || 0,
+            instagramProfile: data.instagramProfile || '',
+            linkedInProfile: data.linkedInProfile || '',
+          });
         } else {
-          // Create document if it doesn't exist
-          await setDoc(userRef, {
-            name: user.name,
-            email: user.email,
-            username: user.username,
-            experience: user.experience,
+          // Se o usuário logou pela primeira vez (ex: Google) e não tem perfil no Firestore, criamos um!
+          const newUser = {
+            name: firebaseUser.displayName || 'Aluno',
+            email: firebaseUser.email || '',
+            username: `user_${firebaseUser.uid.substring(0,5)}`,
+            experience: 0,
+            profileImage: firebaseUser.photoURL || `https://picsum.photos/seed/${firebaseUser.uid}/200`,
             createdAt: new Date().toISOString()
+          };
+          
+          await setDoc(userRef, newUser);
+          
+          setUser({
+            uid: firebaseUser.uid,
+            ...newUser,
+            displayName: newUser.name,
           });
         }
-      } catch (error) {
-        console.error('Error syncing user with Firestore:', error);
+      } else {
+        // Ninguém logado
+        setUser(null);
       }
-    }
+      setIsUserLoading(false);
+    });
 
-    syncUserWithDb();
-  }, [user?.uid]);
+    return () => unsubscribe();
+  }, []);
 
-  const login = async (name: string, username: string, email: string) => {
-    setUser({
-      uid: `user-${Date.now()}`, // Temporary mock ID, in a real app this comes from Auth
+  const login = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const signup = async (name: string, username: string, email: string, password: string) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = userCredential.user;
+    
+    // Logo após criar a conta no Auth, já criamos o perfil no Firestore
+    const userRef = doc(db, 'users', firebaseUser.uid);
+    await setDoc(userRef, {
       name,
-      displayName: name,
       username,
       email,
-      profileImage: `https://picsum.photos/seed/${username}/200`,
       experience: 0,
-      instagramProfile: '',
-      linkedInProfile: '',
+      profileImage: `https://picsum.photos/seed/${username}/200`,
+      createdAt: new Date().toISOString()
     });
   };
 
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  };
+
   const logout = async () => {
-    setUser(null);
+    await signOut(auth);
   };
 
   const addXP = async (amount: number) => {
     if (!user?.uid) return;
 
-    // Optimistic UI update
+    // Atualização otimista na tela (UI)
     setUser(prev => prev ? { ...prev, experience: prev.experience + amount } : null);
 
     try {
@@ -104,13 +135,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
       });
     } catch (error) {
       console.error('Failed to add XP to Firestore:', error);
-      // Revert optimistic update on failure
+      // Reverte caso dê erro no banco
       setUser(prev => prev ? { ...prev, experience: prev.experience - amount } : null);
     }
   };
 
   return (
-    <UserContext.Provider value={{ user, isUserLoading, login, logout, addXP }}>
+    <UserContext.Provider value={{ user, isUserLoading, login, signup, loginWithGoogle, logout, addXP }}>
       {children}
     </UserContext.Provider>
   );
