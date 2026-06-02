@@ -36,7 +36,18 @@ export function PublicFooter() {
   const onContactSubmit = async (values: z.infer<typeof contactSchema>) => {
     setIsSendingContact(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...values, subject: 'contato' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao enviar mensagem');
+      }
+
       toast({
         title: 'Mensagem enviada!',
         description: 'Entraremos em contato em breve.',

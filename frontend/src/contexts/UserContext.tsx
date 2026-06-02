@@ -1,6 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 interface User {
   uid: string;
@@ -19,6 +21,7 @@ interface UserContextType {
   isUserLoading: boolean;
   login: (name: string, username: string, email: string) => Promise<void>;
   logout: () => Promise<void>;
+  addXP: (amount: number) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -35,13 +38,47 @@ export function UserProvider({ children }: { children: ReactNode }) {
     instagramProfile: '',
     linkedInProfile: '',
   });
-  const [isUserLoading] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(false);
+
+  // Sync with Firestore when user changes
+  useEffect(() => {
+    async function syncUserWithDb() {
+      if (!user?.uid) return;
+      
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          // Update local state with DB experience
+          const data = userSnap.data();
+          if (data.experience !== undefined && data.experience !== user.experience) {
+            setUser(prev => prev ? { ...prev, experience: data.experience } : null);
+          }
+        } else {
+          // Create document if it doesn't exist
+          await setDoc(userRef, {
+            name: user.name,
+            email: user.email,
+            username: user.username,
+            experience: user.experience,
+            createdAt: new Date().toISOString()
+          });
+        }
+      } catch (error) {
+        console.error('Error syncing user with Firestore:', error);
+      }
+    }
+
+    syncUserWithDb();
+  }, [user?.uid]);
 
   const login = async (name: string, username: string, email: string) => {
-    // Mock login - sempre sucesso
     setUser({
-      uid: `user-${Date.now()}`,
-      name,      displayName: name,      username,
+      uid: `user-${Date.now()}`, // Temporary mock ID, in a real app this comes from Auth
+      name,
+      displayName: name,
+      username,
       email,
       profileImage: `https://picsum.photos/seed/${username}/200`,
       experience: 0,
@@ -54,8 +91,26 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const addXP = async (amount: number) => {
+    if (!user?.uid) return;
+
+    // Optimistic UI update
+    setUser(prev => prev ? { ...prev, experience: prev.experience + amount } : null);
+
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        experience: increment(amount)
+      });
+    } catch (error) {
+      console.error('Failed to add XP to Firestore:', error);
+      // Revert optimistic update on failure
+      setUser(prev => prev ? { ...prev, experience: prev.experience - amount } : null);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, isUserLoading, login, logout }}>
+    <UserContext.Provider value={{ user, isUserLoading, login, logout, addXP }}>
       {children}
     </UserContext.Provider>
   );

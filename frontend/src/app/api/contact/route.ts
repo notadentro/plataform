@@ -1,21 +1,13 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import { personalizedLessonRecommendations } from '@/ai/flows/personalized-lesson-recommendations';
 
-dotenv.config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.post('/api/contact', async (req, res) => {
+export async function POST(req: Request) {
   try {
-    const { name, email, whatsapp, subject, message } = req.body;
+    const body = await req.json();
+    const { name, email, whatsapp, subject, message } = body;
 
     if (!name || !email || !subject || !message) {
-      return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+      return NextResponse.json({ error: 'Todos os campos são obrigatórios' }, { status: 400 });
     }
 
     // Configurar o transportador do Nodemailer com Zoho SMTP
@@ -43,25 +35,9 @@ app.post('/api/contact', async (req, res) => {
       text: `Nome: ${name}\nEmail: ${email}\nWhatsApp: ${whatsapp || 'Não informado'}\nAssunto: ${subject}\n\nMensagem:\n${message}`,
     });
 
-    res.status(200).json({ success: true, message: 'Contato enviado com sucesso' });
+    return NextResponse.json({ success: true, message: 'Contato enviado com sucesso' }, { status: 200 });
   } catch (error) {
     console.error('Erro ao enviar contato:', error);
-    res.status(500).json({ error: 'Erro interno ao enviar e-mail' });
+    return NextResponse.json({ error: 'Erro interno ao enviar e-mail' }, { status: 500 });
   }
-});
-
-app.post('/api/recommendations', async (req, res) => {
-  try {
-    const input = req.body;
-    const recommendations = await personalizedLessonRecommendations(input);
-    res.json(recommendations);
-  } catch (error) {
-    console.error('Error generating recommendations:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
-});
+}

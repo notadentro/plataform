@@ -11,6 +11,8 @@ import { FillBlanks } from './exercises/FillBlanks';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { useUser } from '@/contexts/UserContext';
+import { useRef } from 'react';
 
 interface LessonEngineProps {
   lesson: Lesson;
@@ -22,6 +24,8 @@ export function LessonEngine({ lesson }: LessonEngineProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isChecking, setIsChecking] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const { addXP } = useUser();
+  const hasAwardedXP = useRef(false);
 
   const steps = lesson.steps;
   const isFinished = currentIndex >= steps.length;
@@ -29,6 +33,10 @@ export function LessonEngine({ lesson }: LessonEngineProps) {
 
   useEffect(() => {
     if (isFinished) {
+      if (!hasAwardedXP.current) {
+        addXP(50); // Provide 50 XP per lesson completion
+        hasAwardedXP.current = true;
+      }
       // Golden fireworks!
       const duration = 3 * 1000;
       const animationEnd = Date.now() + duration;

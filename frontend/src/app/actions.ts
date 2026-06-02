@@ -1,5 +1,7 @@
 'use server';
 
+import { personalizedLessonRecommendations } from '@/ai/flows/personalized-lesson-recommendations';
+
 export type PersonalizedLessonRecommendationsInput = {
     userId: string;
     learningHistory: Array<{
@@ -45,20 +47,7 @@ export async function getPersonalizedRecommendations(): Promise<PersonalizedLess
     };
 
     try {
-        const response = await fetch('http://localhost:4000/api/recommendations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(input),
-            cache: 'no-store',
-        });
-
-        if (!response.ok) {
-            throw new Error(`Backend error: ${response.status}`);
-        }
-
-        const recommendations: PersonalizedLessonRecommendationsOutput = await response.json();
+        const recommendations = await personalizedLessonRecommendations(input);
         
         // Add topic and difficulty to recommendations for frontend use
         return recommendations.map(rec => {
