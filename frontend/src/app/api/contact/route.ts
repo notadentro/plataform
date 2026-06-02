@@ -11,10 +11,11 @@ export async function POST(req: Request) {
     }
 
     // Configurar o transportador do Nodemailer com Zoho SMTP
+    const port = Number(process.env.SMTP_PORT) || 465;
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.zoho.com',
-      port: 465,
-      secure: true, // true para port 465
+      port: port,
+      secure: port === 465, // true para 465, false para outras portas (ex: 587)
       auth: {
         user: process.env.SMTP_USER, // ex: contato@notadentro.com
         pass: process.env.SMTP_PASS, // Senha de Aplicativo
