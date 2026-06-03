@@ -42,9 +42,10 @@ export function OnboardingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-brand-black/95 backdrop-blur-sm p-4">
-      <div className="w-full max-w-2xl relative">
-        <AnimatePresence mode="wait">
+    <div className="fixed inset-0 z-[100] overflow-y-auto bg-brand-black/95 backdrop-blur-md flex flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 min-h-screen">
+        <div className="w-full max-w-2xl relative pb-8">
+          <AnimatePresence mode="wait">
           {step === 'goal' && (
             <motion.div
               key="goal"
@@ -73,12 +74,12 @@ export function OnboardingModal() {
                       onClick={() => setSelectedGoal(goal.id)}
                       className={`p-4 cursor-pointer border-2 transition-all hover:-translate-y-1 ${
                         isSelected 
-                          ? 'border-brand-yellow bg-brand-yellow/10' 
-                          : 'border-white/10 bg-white/5 hover:border-brand-yellow/50'
+                          ? 'border-brand-gold bg-brand-gold/10' 
+                          : 'border-white/10 bg-white/5 hover:border-brand-gold/50'
                       }`}
                     >
                       <div className="flex items-center space-x-4">
-                        <div className={`p-3 rounded-full ${isSelected ? 'bg-brand-yellow text-brand-black' : 'bg-white/10 text-brand-yellow'}`}>
+                        <div className={`p-3 rounded-full ${isSelected ? 'bg-brand-gold text-brand-black' : 'bg-white/10 text-brand-gold'}`}>
                           <Icon size={24} />
                         </div>
                         <div className="text-left">
@@ -91,13 +92,15 @@ export function OnboardingModal() {
                 })}
               </div>
 
-              <Button 
-                onClick={handleNext} 
-                disabled={!selectedGoal}
-                className="w-full md:w-1/2 py-6 text-lg font-bold bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
-              >
-                Continuar
-              </Button>
+              <div className="pt-8 w-full flex justify-center">
+                <Button 
+                  onClick={handleNext} 
+                  disabled={!selectedGoal}
+                  className="w-full md:w-1/2 py-6 text-lg font-bold bg-brand-gold text-brand-black hover:bg-brand-gold/90"
+                >
+                  Continuar
+                </Button>
+              </div>
             </motion.div>
           )}
 
@@ -129,12 +132,12 @@ export function OnboardingModal() {
                       onClick={() => setSelectedLevel(lvl.id)}
                       className={`p-4 cursor-pointer border-2 transition-all hover:-translate-y-1 ${
                         isSelected 
-                          ? 'border-brand-yellow bg-brand-yellow/10' 
-                          : 'border-white/10 bg-white/5 hover:border-brand-yellow/50'
+                          ? 'border-brand-gold bg-brand-gold/10' 
+                          : 'border-white/10 bg-white/5 hover:border-brand-gold/50'
                       }`}
                     >
                       <div className="flex items-center space-x-4">
-                        <div className={`p-3 rounded-full ${isSelected ? 'bg-brand-yellow text-brand-black' : 'bg-white/10 text-brand-yellow'}`}>
+                        <div className={`p-3 rounded-full ${isSelected ? 'bg-brand-gold text-brand-black' : 'bg-white/10 text-brand-gold'}`}>
                           <Icon size={24} />
                         </div>
                         <div className="text-left">
@@ -147,7 +150,7 @@ export function OnboardingModal() {
                 })}
               </div>
 
-              <div className="flex space-x-4 max-w-md mx-auto">
+              <div className="pt-8 flex space-x-4 max-w-md mx-auto w-full">
                 <Button 
                   onClick={() => setStep('goal')} 
                   variant="outline"
@@ -158,7 +161,7 @@ export function OnboardingModal() {
                 <Button 
                   onClick={handleNext} 
                   disabled={!selectedLevel}
-                  className="w-2/3 py-6 text-lg font-bold bg-brand-yellow text-brand-black hover:bg-brand-yellow/90"
+                  className="w-2/3 py-6 text-lg font-bold bg-brand-gold text-brand-black hover:bg-brand-gold/90"
                 >
                   Continuar
                 </Button>
@@ -173,7 +176,7 @@ export function OnboardingModal() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center space-y-8"
             >
-              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-brand-yellow/20 text-brand-yellow mb-4">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-brand-gold/20 text-brand-gold mb-4">
                 <Target size={48} />
               </div>
               
@@ -188,13 +191,14 @@ export function OnboardingModal() {
 
               <Button 
                 onClick={handleComplete} 
-                className="w-full md:w-1/2 py-6 text-xl font-bold bg-brand-yellow text-brand-black hover:bg-brand-yellow/90 animate-pulse"
+                className="w-full md:w-1/2 py-6 text-xl font-bold bg-brand-gold text-brand-black hover:bg-brand-gold/90 animate-pulse"
               >
                 Começar a Jogar
               </Button>
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
       </div>
     </div>
   );
