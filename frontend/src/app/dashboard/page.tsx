@@ -1,12 +1,12 @@
 'use client';
 
-import { DATABASE } from '@/constants/curriculum';
+import { useState, useEffect } from 'react';
 import { UserProgress } from '@/modules/dashboard/components/user-progress';
 import { AchievementIcon } from '@/modules/dashboard/components/achievement-icon';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useUser } from '@/contexts/UserContext';
 import Link from 'next/link';
-import { Shield, Anchor, Crosshair, GraduationCap, Music, ArrowRight } from 'lucide-react';
+import { Shield, Anchor, Crosshair, GraduationCap, Music, ArrowRight, PenTool } from 'lucide-react';
 
 const iconMap: Record<string, React.ReactNode> = {
   Shield: <Shield className="w-8 h-8" />,
@@ -18,6 +18,18 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export default function DashboardPage() {
     const { user } = useUser();
+    const [trails, setTrails] = useState<any[]>([]);
+
+    useEffect(() => {
+      fetch('/api/public/curriculum')
+        .then(res => res.json())
+        .then(data => {
+          if (data.database) {
+            setTrails(data.database);
+          }
+        })
+        .catch(console.error);
+    }, []);
 
     const achievements = [
         { title: "Iniciante", description: "Completou 10 lições" },
@@ -32,13 +44,28 @@ export default function DashboardPage() {
                     Olá, {user?.displayName?.split(' ')[0] || 'Aluno'}! 👋
                 </h1>
                 <p className="text-muted-foreground text-lg">Qual o seu objetivo principal hoje?</p>
+                
+                {user?.onboardingData?.goal === 'livre' && (
+                  <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-2 text-sm font-body">
+                    <span className="px-3 py-1 bg-brand-gold/20 text-brand-gold rounded-full font-bold">
+                      Foco: {user.onboardingData.focus === 'harmonia' ? 'Harmonia' : user.onboardingData.focus === 'melodia' ? 'Melodia' : user.onboardingData.focus === 'ritmo' ? 'Percussão' : 'Geral'}
+                    </span>
+                    {user.onboardingData.instruments?.map(inst => (
+                      <span key={inst} className="px-3 py-1 bg-[#2D8A5C]/20 text-[#2D8A5C] rounded-full font-bold capitalize">
+                        {inst}
+                      </span>
+                    ))}
+                  </div>
+                )}
             </header>
 
             <div className="grid gap-8 lg:grid-cols-3">
                 <div className="lg:col-span-2 space-y-8 flex flex-col">
                     <section className="w-full">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {DATABASE.map(trail => (
+                            {trails.length === 0 ? (
+                              <p className="text-muted-foreground col-span-2">Carregando trilhas...</p>
+                            ) : trails.map(trail => (
                             <Link href={`/dashboard/trail/${trail.id}`} key={trail.id} className="block group">
                                 <Card className="h-full border-2 border-brand-graphite/20 hover:border-[#2D8A5C] transition-all hover:shadow-[0_8px_0_0_#2D8A5C] hover:-translate-y-2 bg-background cursor-pointer flex flex-col">
                                 <CardHeader className="flex flex-row items-start gap-4">
@@ -77,6 +104,20 @@ export default function DashboardPage() {
                             </div>
                         </CardContent>
                     </Card>
+
+                    <Link href="/blog" className="block group">
+                        <Card className="border-2 border-brand-graphite/20 hover:border-brand-gold transition-all hover:shadow-[0_8px_0_0_#EEBB2E] hover:-translate-y-2 bg-brand-black text-brand-white cursor-pointer">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 font-headline text-lg text-brand-gold">
+                                    <PenTool className="w-5 h-5" />
+                                    Artigos & Dicas
+                                </CardTitle>
+                                <CardDescription className="text-brand-gray font-body mt-2">
+                                    Leia conteúdos complementares, dicas de estudo e análises teóricas.
+                                </CardDescription>
+                            </CardHeader>
+                        </Card>
+                    </Link>
                 </aside>
             </div>
         </div>

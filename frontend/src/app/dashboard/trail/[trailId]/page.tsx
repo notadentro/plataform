@@ -1,19 +1,22 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DATABASE } from '@/constants/curriculum';
-import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Crosshair, Anchor, BookOpen } from 'lucide-react';
 import { notFound } from 'next/navigation';
+import { getDynamicCurriculum } from '@/utils/content';
+import { Shield, Anchor, Crosshair, GraduationCap, Music, ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
 const iconMap: Record<string, React.ReactNode> = {
-  Crosshair: <Crosshair className="w-8 h-8" />,
+  Shield: <Shield className="w-8 h-8" />,
   Anchor: <Anchor className="w-8 h-8" />,
-  BookOpen: <BookOpen className="w-8 h-8" />
+  Crosshair: <Crosshair className="w-8 h-8" />,
+  GraduationCap: <GraduationCap className="w-8 h-8" />,
+  Music: <Music className="w-8 h-8" />
 };
 
 export default async function TrailPage({ params }: { params: Promise<{ trailId: string }> }) {
   const resolvedParams = await params;
-  const trail = DATABASE.find(t => t.id === resolvedParams.trailId);
+  const dynamicDb = await getDynamicCurriculum();
+  const trail = dynamicDb.find(t => t.id === resolvedParams.trailId);
   
   if (!trail) notFound();
 
@@ -30,7 +33,7 @@ export default async function TrailPage({ params }: { params: Promise<{ trailId:
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {trail.courses.map(course => (
+          {trail.courses.map((course: any) => (
             <Link href={`/dashboard/course/${course.id}`} key={course.id} className="block group">
               <Card className="h-full border-2 border-brand-graphite/20 hover:border-brand-gold transition-all hover:shadow-[0_8px_0_0_#FACC15] hover:-translate-y-2 bg-background cursor-pointer flex flex-col">
                 <CardHeader className="flex flex-row items-center gap-4">

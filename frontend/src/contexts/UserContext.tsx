@@ -30,7 +30,8 @@ interface User {
   instagramProfile?: string;
   linkedInProfile?: string;
   hasCompletedOnboarding?: boolean;
-  onboardingData?: { goal: string; level: string; };
+  onboardingData?: { goal: string; level: string; focus?: string; instruments?: string[]; };
+  isAdmin?: boolean;
 }
 
 interface UserContextType {
@@ -42,7 +43,7 @@ interface UserContextType {
   logout: () => Promise<void>;
   addXP: (amount: number) => Promise<void>;
   updateProgress: (completedLessons: string[], unlockedLessons: string[]) => Promise<void>;
-  completeOnboarding: (goal: string, level: string) => Promise<void>;
+  completeOnboarding: (goal: string, level: string, focus?: string, instruments?: string[]) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -77,6 +78,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
             linkedInProfile: data.linkedInProfile || '',
             hasCompletedOnboarding: data.hasCompletedOnboarding ?? false,
             onboardingData: data.onboardingData || { goal: '', level: '' },
+            isAdmin: data.isAdmin ?? false,
           });
         } else {
           // Se o usuário logou pela primeira vez (ex: Google) e não tem perfil no Firestore, criamos um!
@@ -185,20 +187,20 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const completeOnboarding = async (goal: string, level: string) => {
+  const completeOnboarding = async (goal: string, level: string, focus?: string, instruments?: string[]) => {
     if (!user?.uid) return;
 
     setUser(prev => prev ? {
       ...prev,
       hasCompletedOnboarding: true,
-      onboardingData: { goal, level }
+      onboardingData: { goal, level, focus, instruments }
     } : null);
 
     try {
       const userRef = doc(db, 'users', user.uid);
       await updateDoc(userRef, {
         hasCompletedOnboarding: true,
-        onboardingData: { goal, level }
+        onboardingData: { goal, level, focus, instruments }
       });
     } catch (error) {
       console.error('Failed to update onboarding status in Firestore:', error);

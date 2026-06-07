@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BLOG_POSTS } from '@/constants/blog';
+import { getBlogPosts } from '@/utils/content';
 import { Logo } from '@/components/logo';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,23 +7,25 @@ import { PublicHeader } from '@/components/public-header';
 import { PublicFooter } from '@/components/public-footer';
 
 export const metadata = {
-  title: 'Blog | Nota Dentro',
+  title: 'Artigos | Nota Dentro',
   description: 'Artigos, tutoriais e dicas sobre teoria musical, harmonia, ritmo e muito mais.',
 };
 
-export default function BlogListPage() {
+export default async function BlogListPage() {
+  const posts = await getBlogPosts();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PublicHeader />
 
       <main className="flex-1 container mx-auto px-4 pt-32 pb-12 md:pt-40 md:pb-16 max-w-5xl">
         <div className="mb-12 space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold font-headline">Blog Nota Dentro</h1>
+          <h1 className="text-4xl md:text-5xl font-bold font-headline">Artigos Nota Dentro</h1>
           <p className="text-xl text-muted-foreground">Dicas, tutoriais e teoria musical na prática.</p>
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {BLOG_POSTS.map((post) => (
+          {posts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group flex flex-col h-full bg-card rounded-2xl border hover:border-primary transition-colors overflow-hidden hover:shadow-lg">
               <div className="p-6 flex flex-col flex-1">
                 <h2 className="text-2xl font-bold font-headline mb-3 group-hover:text-primary transition-colors line-clamp-2">
