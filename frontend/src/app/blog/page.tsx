@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BLOG_POSTS } from '@/constants/blog';
+import { getBlogPosts } from '@/utils/content';
 import { Logo } from '@/components/logo';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,9 @@ export const metadata = {
   description: 'Artigos, tutoriais e dicas sobre teoria musical, harmonia, ritmo e muito mais.',
 };
 
-export default function BlogListPage() {
+export default async function BlogListPage() {
+  const posts = await getBlogPosts();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PublicHeader />
@@ -23,7 +25,7 @@ export default function BlogListPage() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {BLOG_POSTS.map((post) => (
+          {posts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="group flex flex-col h-full bg-card rounded-2xl border hover:border-primary transition-colors overflow-hidden hover:shadow-lg">
               <div className="p-6 flex flex-col flex-1">
                 <h2 className="text-2xl font-bold font-headline mb-3 group-hover:text-primary transition-colors line-clamp-2">

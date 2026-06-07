@@ -1,4 +1,4 @@
-import { BLOG_POSTS } from '@/constants/blog';
+import { getBlogPosts, getBlogPost } from '@/utils/content';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
@@ -16,7 +16,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
   if (!post) return { title: 'Artigo não encontrado | Nota Dentro' };
 
   return {
@@ -26,15 +26,16 @@ export async function generateMetadata({ params }: Props) {
 }
 
 // Isso permite que o Next.js gere as páginas estáticas durante o build (Otimização Máxima de SEO)
-export function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
 
   if (!post) {
     notFound();
