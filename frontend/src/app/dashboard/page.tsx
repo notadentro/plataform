@@ -32,6 +32,19 @@ export default function DashboardPage() {
                     Olá, {user?.displayName?.split(' ')[0] || 'Aluno'}! 👋
                 </h1>
                 <p className="text-muted-foreground text-lg">Qual o seu objetivo principal hoje?</p>
+                
+                {user?.onboardingData?.goal === 'livre' && (
+                  <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-2 text-sm font-body">
+                    <span className="px-3 py-1 bg-brand-gold/20 text-brand-gold rounded-full font-bold">
+                      Foco: {user.onboardingData.focus === 'harmonia' ? 'Harmonia' : user.onboardingData.focus === 'melodia' ? 'Melodia' : user.onboardingData.focus === 'ritmo' ? 'Percussão' : 'Geral'}
+                    </span>
+                    {user.onboardingData.instruments?.map(inst => (
+                      <span key={inst} className="px-3 py-1 bg-[#2D8A5C]/20 text-[#2D8A5C] rounded-full font-bold capitalize">
+                        {inst}
+                      </span>
+                    ))}
+                  </div>
+                )}
             </header>
 
             <div className="grid gap-8 lg:grid-cols-3">
