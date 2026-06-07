@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { LessonEngine } from '@/modules/lesson/components/LessonEngine';
 import { Button } from '@/components/ui/button';
 import { useGamification } from '@/context/GamificationContext';
-import { Trail } from '@/types/lesson';
+import { Trail } from '@/types/curriculum';
 
 export default function LessonPage() {
     const params = useParams();
@@ -38,7 +38,7 @@ export default function LessonPage() {
           if (course.id === courseId) {
             for (let mIndex = 0; mIndex < course.modules.length; mIndex++) {
               const module = course.modules[mIndex];
-              const lessonIndex = module.lessons.findIndex(l => l.id === lessonId || l.slug === lessonId);
+              const lessonIndex = module.lessons.findIndex((l: any) => l.id === lessonId || l.slug === lessonId);
               
               if (lessonIndex !== -1) {
                 foundLesson = module.lessons[lessonIndex];

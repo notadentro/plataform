@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { DATABASE } from '@/constants/curriculum';
 import fs from 'fs/promises';
 import path from 'path';
-import { Lesson, Trail } from '@/types/lesson';
+import { Lesson } from '@/types/lesson';
+import { Trail } from '@/types/curriculum';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,7 @@ export async function GET() {
       for (const trail of dynamicDb) {
         for (const course of trail.courses) {
           for (const module of course.modules) {
-            const index = module.lessons.findIndex(l => l.id === dLesson.id || l.slug === dLesson.slug);
+            const index = module.lessons.findIndex((l: Lesson) => l.id === dLesson.id || l.slug === dLesson.slug);
             if (index !== -1) {
               // Mescla os dados (mantém a estrutura mas atualiza steps, título, descrição)
               module.lessons[index] = {
