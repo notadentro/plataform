@@ -79,6 +79,7 @@ export interface LessonStep {
   id: string;
   type: StepType;
   title: string;
+  source?: string; // Fonte bibliográfica. Ex: "Bohumil Med", "Esther Scliar", "Maria Luiza de Mattos Priolli"
   data: TheoryStep | QuizStep | TrueFalseStep | MatchColumnsStep | MemoryGameStep | FillBlanksStep;
 }
 
