@@ -31,6 +31,7 @@ interface User {
   linkedInProfile?: string;
   hasCompletedOnboarding?: boolean;
   onboardingData?: { goal: string; level: string; focus?: string; instruments?: string[]; };
+  isAdmin?: boolean;
 }
 
 interface UserContextType {
@@ -77,6 +78,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
             linkedInProfile: data.linkedInProfile || '',
             hasCompletedOnboarding: data.hasCompletedOnboarding ?? false,
             onboardingData: data.onboardingData || { goal: '', level: '' },
+            isAdmin: data.isAdmin ?? false,
           });
         } else {
           // Se o usuário logou pela primeira vez (ex: Google) e não tem perfil no Firestore, criamos um!
