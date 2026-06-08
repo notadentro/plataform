@@ -72,10 +72,10 @@ export default function BusinessPlanPage() {
             <p><strong>Aprofundamento:</strong> Alunos gratuitos frustrados com a perda de vidas e que não querem assinar o Plano Spalla podem realizar microtransações. Além disso, a venda de itens cosméticos fomenta o desejo de personalização.</p>
             <h4>Estruturação e Plano de Ação:</h4>
             <ul>
-              <li><strong>Passo 1:</strong> Criar uma moeda virtual chamada "Cachê" (o usuário ganha 1 cachê por acesso diário).</li>
-              <li><strong>Passo 2:</strong> Vender pacotes de cachês via PIX/Cartão (ex: 100 cachês por R$4,90).</li>
-              <li><strong>Passo 3:</strong> Permitir o uso dos cachês para refilar a barra de vidas instantaneamente.</li>
-              <li><strong>Passo 4:</strong> Criar uma "Loja do App" onde os cachês podem comprar temas escuros (Dark Mode), avatares de grandes compositores (Mozart, Beethoven) e pacotes de sons de acerto (Piano de Cauda, Violino, etc).</li>
+              <li><strong>Passo 1:</strong> Criar uma moeda virtual chamada "Cachê" (o usuário ganha 1 cachê por acesso diário no evento "Passar o Chapéu").</li>
+              <li><strong>Passo 2:</strong> Integrar a Lojinha Interna, cobrando 5 Cachês por 1 Vida Extra, induzindo ao consumo rápido das moedas ganhas de graça.</li>
+              <li><strong>Passo 3:</strong> Vender pacotes instantâneos de Vidas com dinheiro real (ex: Pack 5 Vidas por R$5,00) via integrações super-fluidas (Google Pay / Apple Pay) sem fricção no UX.</li>
+              <li><strong>Passo 4:</strong> Expandir a Lojinha onde os cachês poderão comprar temas escuros (Dark Mode), avatares de grandes compositores e pacotes de sons.</li>
             </ul>
 
             {/* FRONT 4 */}
@@ -119,6 +119,16 @@ export default function BusinessPlanPage() {
               <li><strong>Passo 2:</strong> Gerar links rastreáveis para: <em>Teoria da Música (Bohumil Med)</em>, <em>Princípios de Ritmo e Harmonia (Esther Scliar)</em> e <em>Princípios Básicos da Música (Priolli)</em>.</li>
               <li><strong>Passo 3:</strong> Criar uma seção "Biblioteca Recomendada" dentro do app.</li>
               <li><strong>Passo 4:</strong> Nas explicações teóricas do app, adicionar rodapés: <em>"Para aprofundar este tema, consulte o Capítulo 4 do Med. (Compre o livro aqui)"</em>.</li>
+            </ul>
+
+            {/* FRONT 8 */}
+            <h3>8. Loja Oficial (E-commerce Físico B2C)</h3>
+            <p><strong>Aprofundamento:</strong> Venda direta de produtos físicos como material de apoio aos candidatos. Esta frente fica isolada do Painel do Aluno para alcançar não apenas os usuários cadastrados, mas o grande público por tráfego direto (SEO/Ads).</p>
+            <h4>Estruturação e Plano de Ação:</h4>
+            <ul>
+              <li><strong>Passo 1:</strong> Criar uma Rota Pública (ex: <code>/loja</code>) na landing page da plataforma focada em vendas físicas.</li>
+              <li><strong>Passo 2:</strong> Cadastrar produtos tangíveis: Apostilas diagramadas do Método Scliar, Cadernos de Pautas estilizados e Flashcards de Acordes e Intervalos.</li>
+              <li><strong>Passo 3:</strong> Criar interface administrativa (<code>/admin/store</code>) para controle unificado de estoque e adição de produtos, mesclando ativos virtuais (vidas/cosméticos) e itens físicos da loja externa.</li>
             </ul>
 
             <hr className="my-8" />

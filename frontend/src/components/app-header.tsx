@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UserNav } from '@/components/user-nav';
-import { Flame, Heart, Star, BookOpen, Home, Trophy, Menu, Coins, Infinity as InfinityIcon } from 'lucide-react';
+import { Flame, Heart, Star, BookOpen, Home, Trophy, Menu, Coins, Infinity as InfinityIcon, ShoppingBag } from 'lucide-react';
 import { useGamification } from '@/context/GamificationContext';
 import { useUser } from '@/contexts/UserContext';
 import { motion } from 'framer-motion';
@@ -17,6 +17,7 @@ const navItems = [
   { href: '/dashboard', label: 'Início', icon: Home },
   { href: '/dashboard/licoes', label: 'Lições', icon: BookOpen },
   { href: '/dashboard/conquistas', label: 'Conquistas', icon: Trophy },
+  { href: '/dashboard/loja', label: 'Lojinha', icon: ShoppingBag },
 ];
 
 export function AppHeader() {

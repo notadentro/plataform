@@ -4,7 +4,7 @@ import { useUser } from '@/contexts/UserContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, BookOpen, PenTool, LogOut, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, BookOpen, PenTool, LogOut, ShieldAlert, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -39,6 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Visão Geral', href: '/admin', icon: LayoutDashboard },
     { name: 'Gerenciar Lições', href: '/admin/lessons', icon: BookOpen },
     { name: 'Artigos', href: '/admin/blog', icon: PenTool },
+    { name: 'Loja (Produtos)', href: '/admin/store', icon: ShoppingBag },
   ];
 
   return (
