@@ -90,7 +90,7 @@ export function MatchColumnsView({ data, isCompleted, onSuccess, onFail }: Props
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto">
-      <p className="text-xl md:text-2xl font-medium text-center mb-2 text-brand-black dark:text-brand-white">
+      <p className="text-xl md:text-2xl font-medium text-center mb-2 text-inherit">
         {data.question}
       </p>
       
@@ -178,7 +178,7 @@ export function MatchColumnsView({ data, isCompleted, onSuccess, onFail }: Props
           >
             <Star className="text-[#2D8A5C] fill-[#2D8A5C] w-12 h-12 mb-4" />
             <p className="text-xl text-[#2D8A5C] font-bold mb-2">Conexões Perfeitas!</p>
-            <p className="text-brand-black dark:text-white/90">{data.explanation}</p>
+            <p className="text-inherit">{data.explanation}</p>
           </motion.div>
         )}
       </AnimatePresence>

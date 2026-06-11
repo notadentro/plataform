@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Lesson, TheoryStep, QuizStep, TrueFalseStep, MemoryGameStep, MatchColumnsStep, FillBlanksStep } from '@/types/lesson';
+import { Lesson, TheoryStep, QuizStep, TrueFalseStep, MemoryGameStep, MatchColumnsStep, FillBlanksStep, SandboxAudioStep, DragDropPautaStep } from '@/types/lesson';
 import { X, Heart, Star } from 'lucide-react';
 import { useGamification } from '@/context/GamificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,6 +12,9 @@ import confetti from 'canvas-confetti';
 import { MemoryGameView } from './MemoryGameView';
 import { MatchColumnsView } from './MatchColumnsView';
 import { FillBlanksView } from './FillBlanksView';
+import { SandboxAudioView } from './SandboxAudioView';
+import { TeacherBubble } from './TeacherBubble';
+import { StaffDragDropView } from './StaffDragDropView';
 
 interface LessonEngineProps {
   lesson: Lesson;
@@ -109,8 +112,31 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
     );
   }
 
+  const renderStepContent = () => {
+    switch (currentStep.type) {
+      case 'theory':
+        return <TheoryView data={currentStep.data as TheoryStep} />;
+      case 'quiz':
+        return <QuizView data={currentStep.data as QuizStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} onFail={loseLife} />;
+      case 'true_false':
+        return <TrueFalseView data={currentStep.data as TrueFalseStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} onFail={loseLife} />;
+      case 'memory_game':
+        return <MemoryGameView data={currentStep.data as MemoryGameStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} onFail={loseLife} />;
+      case 'match_columns':
+        return <MatchColumnsView data={currentStep.data as MatchColumnsStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} onFail={loseLife} />;
+      case 'fill_blanks':
+        return <FillBlanksView data={currentStep.data as FillBlanksStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} onFail={loseLife} />;
+      case 'sandbox_audio':
+        return <SandboxAudioView data={currentStep.data as SandboxAudioStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} />;
+      case 'drag_drop_pauta':
+        return <StaffDragDropView step={currentStep.data as DragDropPautaStep} isCompleted={completedSteps[currentIndex]} onSuccess={markStepComplete} />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-screen">
+    <div className="flex-1 flex flex-col h-[100dvh] overflow-hidden">
       {/* Top Bar */}
       <div className="h-16 px-4 md:px-8 flex items-center gap-4 z-50 relative bg-background/90 backdrop-blur">
         <button onClick={onClose} className="p-2 hover:bg-brand-graphite/10 rounded-full transition-colors text-brand-gray">
@@ -133,7 +159,7 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 flex flex-col items-center p-6 md:p-12 overflow-y-auto">
+      <div className="flex-1 flex flex-col items-center px-4 py-2 md:p-12 overflow-y-auto overflow-x-hidden">
         <AnimatePresence mode="wait">
           <motion.div 
             key={currentIndex}
@@ -143,59 +169,20 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
             transition={{ duration: 0.3 }}
             className="w-full max-w-2xl flex flex-col flex-1"
           >
-            <h2 className="text-3xl font-bold font-headline mb-8 text-center text-brand-black dark:text-brand-white">
+            <h2 className="text-2xl md:text-3xl font-bold font-headline mb-4 md:mb-8 text-center text-brand-black dark:text-brand-white">
                 {currentStep.title}
             </h2>
             
             <div className="flex-1 flex flex-col justify-center">
-                {currentStep.type === 'theory' && (
-                <TheoryView data={currentStep.data as TheoryStep} />
-                )}
-                
-                {currentStep.type === 'quiz' && (
-                <QuizView 
-                    data={currentStep.data as QuizStep} 
-                    isCompleted={completedSteps[currentIndex]}
-                    onSuccess={markStepComplete}
-                    onFail={loseLife}
-                />
-                )}
-                
-                {currentStep.type === 'true_false' && (
-                <TrueFalseView 
-                    data={currentStep.data as TrueFalseStep} 
-                    isCompleted={completedSteps[currentIndex]}
-                    onSuccess={markStepComplete}
-                    onFail={loseLife}
-                />
-                )}
-                
-                {currentStep.type === 'memory_game' && (
-                <MemoryGameView 
-                    data={currentStep.data as MemoryGameStep} 
-                    isCompleted={completedSteps[currentIndex]}
-                    onSuccess={markStepComplete}
-                    onFail={loseLife}
-                />
-                )}
-                
-                {currentStep.type === 'match_columns' && (
-                <MatchColumnsView 
-                    data={currentStep.data as MatchColumnsStep} 
-                    isCompleted={completedSteps[currentIndex]}
-                    onSuccess={markStepComplete}
-                    onFail={loseLife}
-                />
-                )}
-
-                {currentStep.type === 'fill_blanks' && (
-                <FillBlanksView 
-                    data={currentStep.data as FillBlanksStep} 
-                    isCompleted={completedSteps[currentIndex]}
-                    onSuccess={markStepComplete}
-                    onFail={loseLife}
-                />
-                )}
+              {currentStep.avatar ? (
+                <TeacherBubble avatar={currentStep.avatar}>
+                  {renderStepContent()}
+                </TeacherBubble>
+              ) : (
+                <div className="text-brand-black dark:text-brand-white w-full">
+                  {renderStepContent()}
+                </div>
+              )}
             </div>
             
           </motion.div>
@@ -203,12 +190,12 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
       </div>
 
       {/* Bottom Bar (Navigation) */}
-      <div className="p-4 md:px-8 md:py-6 border-t border-brand-graphite/20 bg-background flex items-center justify-between gap-4 sticky bottom-0 z-50">
+      <div className="p-3 md:px-8 md:py-6 border-t border-brand-graphite/20 bg-background flex items-center justify-between gap-4 sticky bottom-0 z-50">
         <Button 
           variant="outline" 
           onClick={handlePrev} 
           disabled={currentIndex === 0}
-          className="rounded-2xl font-bold py-6 px-8 text-brand-gray border-brand-graphite/30 hover:bg-brand-graphite/10 text-lg md:min-w-[150px]"
+          className="rounded-2xl font-bold py-4 px-6 md:py-6 md:px-8 text-brand-gray border-brand-graphite/30 hover:bg-brand-graphite/10 text-base md:text-lg min-w-[120px] md:min-w-[150px]"
         >
           Voltar
         </Button>
@@ -216,7 +203,7 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
           onClick={handleNext} 
           disabled={!isCompleted}
           className={cn(
-            "rounded-2xl font-bold py-6 px-8 text-lg min-w-[150px] transition-all",
+            "rounded-2xl font-bold py-4 px-6 md:py-6 md:px-8 text-base md:text-lg min-w-[120px] md:min-w-[150px] transition-all",
             isCompleted 
               ? "bg-[#2D8A5C] hover:bg-green-600 text-white shadow-[0_4px_0_0_#1e5f3f] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#1e5f3f] active:translate-y-1 active:shadow-[0_0px_0_0_#1e5f3f]" 
               : "bg-brand-graphite/20 text-brand-gray cursor-not-allowed border-none shadow-none"
@@ -233,8 +220,8 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
 
 function TheoryView({ data }: { data: TheoryStep }) {
   return (
-    <div className="prose prose-lg dark:prose-invert max-w-none text-center mx-auto">
-      <p className="text-xl leading-relaxed text-brand-black dark:text-brand-white font-body">
+    <div className="prose prose-base md:prose-lg max-w-none text-center mx-auto text-inherit">
+      <p className="text-lg md:text-xl leading-relaxed text-inherit font-body">
         {/* Usando Regex para transformar **texto** em bold simples caso venha do JSON */}
         {data.content.split(/(\*\*.*?\*\*)/).map((part, i) => {
             if (part.startsWith('**') && part.endsWith('**')) {
@@ -265,8 +252,8 @@ function QuizView({ data, isCompleted, onSuccess, onFail }: { data: QuizStep, is
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto">
-      <p className="text-xl md:text-2xl font-medium text-center mb-8 text-brand-black dark:text-brand-white">{data.question}</p>
+    <div className="flex flex-col gap-4 md:gap-8 w-full max-w-4xl mx-auto">
+      <p className="text-lg md:text-2xl font-medium text-center mb-4 md:mb-8 text-inherit">{data.question}</p>
       
       <div className="relative">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -291,7 +278,7 @@ function QuizView({ data, isCompleted, onSuccess, onFail }: { data: QuizStep, is
                 transition={{ duration: 0.4 }}
                 onClick={() => handleSelect(opt)}
                 disabled={isCompleted}
-                className={cn("p-4 md:p-6 rounded-2xl text-lg font-semibold text-center transition-all", btnClass, isLastOdd && "md:col-span-2")}
+                className={cn("p-3 md:p-6 rounded-2xl text-base md:text-lg font-semibold text-center transition-all", btnClass, isLastOdd && "md:col-span-2")}
               >
                 {opt}
               </motion.button>
@@ -362,9 +349,9 @@ function TrueFalseView({ data, isCompleted, onSuccess, onFail }: { data: TrueFal
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-lg mx-auto">
-      <div className="p-8 md:p-12 bg-brand-graphite/5 rounded-3xl border border-brand-graphite/20 mb-4 shadow-inner">
-        <p className="text-2xl font-serif text-center italic text-brand-black dark:text-brand-white">"{data.statement}"</p>
+    <div className="flex flex-col gap-4 md:gap-6 w-full max-w-lg mx-auto">
+      <div className="p-6 md:p-12 bg-brand-graphite/5 rounded-3xl border border-brand-graphite/20 mb-2 md:mb-4 shadow-inner">
+        <p className="text-2xl font-serif text-center italic text-inherit">"{data.statement}"</p>
       </div>
       
       <div className="relative">
@@ -375,7 +362,7 @@ function TrueFalseView({ data, isCompleted, onSuccess, onFail }: { data: TrueFal
             onClick={() => handleSelect(true)}
             disabled={isCompleted}
             className={cn(
-              "p-6 rounded-2xl text-xl font-bold text-center transition-all border-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]",
+              "p-4 md:p-6 rounded-2xl text-lg md:text-xl font-bold text-center transition-all border-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]",
               isCompleted && data.isTrue ? "border-[#2D8A5C] bg-[#2D8A5C] text-white shadow-[0_0_20px_#2D8A5C] animate-pulse border-4" 
               : selected === true && isWrong ? "border-red-500 bg-red-500 text-white shadow-none"
               : "border-brand-graphite/20 bg-background hover:bg-brand-graphite/5 text-brand-black dark:text-brand-white"
@@ -389,7 +376,7 @@ function TrueFalseView({ data, isCompleted, onSuccess, onFail }: { data: TrueFal
             onClick={() => handleSelect(false)}
             disabled={isCompleted}
             className={cn(
-              "p-6 rounded-2xl text-xl font-bold text-center transition-all border-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]",
+              "p-4 md:p-6 rounded-2xl text-lg md:text-xl font-bold text-center transition-all border-2 shadow-[0_4px_0_0_rgba(0,0,0,0.1)]",
               isCompleted && !data.isTrue ? "border-[#2D8A5C] bg-[#2D8A5C] text-white shadow-[0_0_20px_#2D8A5C] animate-pulse border-4" 
               : selected === false && isWrong ? "border-red-500 bg-red-500 text-white shadow-none"
               : "border-brand-graphite/20 bg-background hover:bg-brand-graphite/5 text-brand-black dark:text-brand-white"
