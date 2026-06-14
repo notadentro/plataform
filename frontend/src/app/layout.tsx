@@ -78,6 +78,14 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/favicon.ico' },
+    ],
+  },
 };
 
 export default function RootLayout({
