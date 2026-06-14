@@ -33,10 +33,5 @@ jobs:
     - name: Run TypeScript Type Check
       run: npm run typecheck --prefix frontend
 
-    # ========================================================
-    # ATENÇÃO: O Vitest e o Playwright ainda não foram 
-    # instalados no package.json. Quando a Issue #10 for 
-    # concluída, basta descomentar a linha abaixo:
-    # ========================================================
-    # - name: Run Unit Tests
-    #   run: npm run test --prefix frontend
+    - name: Run Unit Tests
+      run: npm run test --prefix frontend
