@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getBlogPosts } from '@/utils/content';
 
-const BASE_URL = 'https://notadentro.com.br';
+const BASE_URL = 'https://www.notadentro.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
