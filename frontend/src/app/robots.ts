@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://www.notadentro.com';
+const BASE_URL = 'https://notadentro.com';
 
 export default function robots(): MetadataRoute.Robots {
   return {
