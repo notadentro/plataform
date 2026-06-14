@@ -8,7 +8,7 @@ export type LessonStatus = 'locked' | 'available' | 'completed';
 /**
  * Diferenciação entre conteúdo teórico e desafios práticos.
  */
-export type StepType = 'theory' | 'quiz' | 'true_false' | 'match_columns' | 'memory_game' | 'fill_blanks';
+export type StepType = 'theory' | 'quiz' | 'true_false' | 'match_columns' | 'memory_game' | 'fill_blanks' | 'sandbox_audio' | 'drag_drop_pauta' | 'drag_drop_pizza' | 'graphic_showcase';
 
 /**
  * Estrutura de um desafio (Quiz).
@@ -72,6 +72,38 @@ export interface TheoryStep {
 }
 
 /**
+ * Estrutura de uma Invenção de Áudio (Sandbox Oscilador)
+ */
+export interface SandboxAudioStep {
+  question: string;
+  successMessage: string;
+}
+
+export interface DragDropPautaStep {
+  question: string;
+  expectedTarget: 'line-1' | 'space-1' | 'line-2' | 'space-2' | 'line-3' | 'space-3' | 'line-4' | 'space-4' | 'line-5';
+  successMessage: string;
+}
+
+export interface DragDropPizzaStep {
+  question: string;
+  expectedTarget: string[];
+  successMessage: string;
+}
+
+export interface GraphicShowcaseItem {
+  name: string;
+  image_url?: string;
+  symbol?: string;
+  description: string;
+}
+
+export interface GraphicShowcaseStep {
+  items: GraphicShowcaseItem[];
+  content?: string;
+}
+
+/**
  * Um passo (Step) individual dentro de uma lição.
  * O campo 'type' serve como discriminador para o TypeScript saber se é teoria ou quiz.
  */
@@ -80,7 +112,8 @@ export interface LessonStep {
   type: StepType;
   title: string;
   source?: string; // Fonte bibliográfica. Ex: "Teoria Clássica", "Fundamentos Musicais"
-  data: TheoryStep | QuizStep | TrueFalseStep | MatchColumnsStep | MemoryGameStep | FillBlanksStep;
+  avatar?: 'odette' | 'scliar' | 'priolli' | 'med' | 'mascarenhas' | 'annie'; // Professor avatar
+  data: TheoryStep | QuizStep | TrueFalseStep | MatchColumnsStep | MemoryGameStep | FillBlanksStep | SandboxAudioStep | DragDropPautaStep | DragDropPizzaStep | GraphicShowcaseStep;
 }
 
 /**
