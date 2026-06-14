@@ -47,7 +47,7 @@ interface UserContextType {
   checkEmailExists: (email: string) => Promise<boolean>;
   sendMagicLink: (email: string) => Promise<void>;
   finishMagicLinkSignup: (email: string, windowUrl: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
+  loginWithGoogle: () => Promise<boolean>;
   logout: () => Promise<void>;
   addXP: (amount: number) => Promise<void>;
   updateProgress: (completedLessons: string[], unlockedLessons: string[]) => Promise<void>;
@@ -194,9 +194,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (): Promise<boolean> => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    const additionalInfo = getAdditionalUserInfo(result);
+    return additionalInfo?.isNewUser ?? false;
   };
 
   const logout = async () => {
