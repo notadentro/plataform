@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/logo';
-import { CircleUser, Music4, GitBranch, ArrowRight, Star, ShieldCheck, Instagram, Youtube, Twitter } from 'lucide-react';
+import { CircleUser, Music4, GitBranch, ArrowRight, Star, ShieldCheck, Instagram, Youtube, Twitter, Gamepad2, GraduationCap } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -279,7 +279,7 @@ export default function LandingPage() {
           </Button>
           <Button variant="ghost" className="text-gray-300 hover:text-white" asChild>
             <Link href="/blog" prefetch={false}>
-              Blog
+              Artigos
             </Link>
           </Button>
           
@@ -523,22 +523,54 @@ export default function LandingPage() {
                   <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl xl:text-7xl/none font-headline text-transparent bg-clip-text bg-gradient-to-br from-primary to-yellow-200 drop-shadow-sm">
                     Aprenda música de forma dinâmica
                   </h1>
-                  <p className="max-w-[600px] text-gray-400 text-lg md:text-xl mx-auto lg:mx-0 font-light leading-relaxed">
-                     <strong>Nota Dentro</strong> é a plataforma gamificada definitiva para estudos livres, Testes de Habilidade Específica (THE) e Carreiras Militares. Domine os fundamentos teóricos de forma prática e interativa.
+                  <p className="max-w-[600px] text-gray-400 text-lg md:text-xl mx-auto lg:mx-0 font-light leading-relaxed mb-6">
+                    A <strong>Nota Dentro</strong> é a plataforma definitiva para você dominar a teoria musical.
                   </p>
+                  
+                  <div className="grid grid-cols-2 gap-2 sm:gap-4 max-w-[600px] mx-auto lg:mx-0 text-left">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl hover:bg-zinc-900/50 border border-transparent hover:border-zinc-800 transition-colors">
+                      <div className="p-1.5 sm:p-2 bg-primary/10 rounded-lg text-primary shrink-0">
+                        <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium text-xs sm:text-sm leading-tight">Plataforma Gamificada</h3>
+                        <p className="text-zinc-500 text-[10px] sm:text-xs mt-1 leading-tight hidden sm:block">Aprenda de forma prática e interativa</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl hover:bg-zinc-900/50 border border-transparent hover:border-zinc-800 transition-colors">
+                      <div className="p-1.5 sm:p-2 bg-purple-500/10 rounded-lg text-purple-400 shrink-0">
+                        <Music4 className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium text-xs sm:text-sm leading-tight">Estudos Livres</h3>
+                        <p className="text-zinc-500 text-[10px] sm:text-xs mt-1 leading-tight hidden sm:block">Evolua no seu próprio ritmo</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl hover:bg-zinc-900/50 border border-transparent hover:border-zinc-800 transition-colors">
+                      <div className="p-1.5 sm:p-2 bg-blue-500/10 rounded-lg text-blue-400 shrink-0">
+                        <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium text-xs sm:text-sm leading-tight">Preparatório THE</h3>
+                        <p className="text-zinc-500 text-[10px] sm:text-xs mt-1 leading-tight hidden sm:block">Testes de Habilidade Específica</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl hover:bg-zinc-900/50 border border-transparent hover:border-zinc-800 transition-colors">
+                      <div className="p-1.5 sm:p-2 bg-green-500/10 rounded-lg text-green-400 shrink-0">
+                        <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium text-xs sm:text-sm leading-tight">Carreiras Militares</h3>
+                        <p className="text-zinc-500 text-[10px] sm:text-xs mt-1 leading-tight hidden sm:block">Sargentos, Oficiais e Fuzileiros</p>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
                 
-                <motion.div variants={fadeUpItem} className="pt-6 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500">
-                  <div className="flex -space-x-3">
-                    {["https://randomuser.me/api/portraits/women/44.jpg", "https://randomuser.me/api/portraits/men/32.jpg", "https://randomuser.me/api/portraits/women/68.jpg", "https://randomuser.me/api/portraits/men/46.jpg"].map((src, i) => (
-                      <div key={i} className={`relative w-10 h-10 rounded-full border-2 border-black bg-zinc-800 flex items-center justify-center z-${10-i} shadow-sm overflow-hidden`}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={src} alt={`Estudante ${i+1}`} className="object-cover w-full h-full" />
-                      </div>
-                    ))}
-                  </div>
-                  <p className="font-medium text-gray-400">Junte-se a dezenas de estudantes.</p>
-                </motion.div>
+
               </motion.div>
 
               {/* Right Content - Embedded Dark Premium Form */}
@@ -555,7 +587,7 @@ export default function LandingPage() {
                 <div className="absolute -inset-1 bg-gradient-to-tr from-primary/30 to-purple-600/30 rounded-3xl blur-2xl -z-10 animate-pulse"></div>
                 <Card className="relative bg-zinc-900/60 backdrop-blur-2xl border-zinc-800/60 shadow-[0_0_50px_-12px_rgba(0,0,0,0.8)] rounded-xl overflow-hidden">
                   <CardHeader className="text-left pb-4 pt-8">
-                    <CardTitle className="text-2xl font-semibold text-white">
+                    <CardTitle className="text-2xl text-center font-semibold text-white">
                       {authStep === 'initial' ? 'Bem-vindo ao Nota Dentro' : authStep === 'login' ? 'Bem-vindo de volta' : 'Verifique seu e-mail'}
                     </CardTitle>
                     {authStep === 'magic_link_sent' && (

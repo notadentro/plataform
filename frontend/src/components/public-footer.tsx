@@ -97,7 +97,7 @@ export function PublicFooter() {
             <ul className="space-y-3">
               <li><Link href="/#how-it-works" className="text-sm text-zinc-400 hover:text-primary transition-colors">Como Funciona</Link></li>
               <li><Link href="/#features" className="text-sm text-zinc-400 hover:text-primary transition-colors">Funcionalidades</Link></li>
-              <li><Link href="/blog" className="text-sm text-zinc-400 hover:text-primary transition-colors">Blog</Link></li>
+              <li><Link href="/blog" className="text-sm text-zinc-400 hover:text-primary transition-colors">Artigos</Link></li>
             </ul>
           </div>
 
@@ -191,7 +191,7 @@ export function PublicFooter() {
                   <ul className="space-y-3 pt-2 pb-4">
                     <li><Link href="/#how-it-works" className="text-sm text-zinc-400 hover:text-primary transition-colors block">Como Funciona</Link></li>
                     <li><Link href="/#features" className="text-sm text-zinc-400 hover:text-primary transition-colors block">Funcionalidades</Link></li>
-                    <li><Link href="/blog" className="text-sm text-zinc-400 hover:text-primary transition-colors block">Blog</Link></li>
+                    <li><Link href="/blog" className="text-sm text-zinc-400 hover:text-primary transition-colors block">Artigos</Link></li>
                   </ul>
                 </AccordionContent>
               </AccordionItem>

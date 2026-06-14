@@ -83,7 +83,7 @@ export function PublicHeader() {
           </Button>
           <Button variant="ghost" className="text-gray-300 hover:text-white hidden md:inline-flex" asChild>
             <Link href="/blog" prefetch={false}>
-              Blog
+              Artigos
             </Link>
           </Button>
           
