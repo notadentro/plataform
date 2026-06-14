@@ -486,11 +486,29 @@ export default function LandingPage() {
         {/* HERO SECTION */}
         <section className="relative w-full min-h-[100svh] flex items-center justify-center overflow-hidden pt-20">
           {/* Animated Background Mesh */}
-          <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black -z-20"></div>
+          <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-900 via-black to-black z-0"></div>
           
-          {/* Subtle Glowing Orbs (Static for better mobile/Safari performance) */}
-          <div className="absolute top-[20%] left-[15%] w-72 h-72 md:w-96 md:h-96 bg-primary/20 rounded-full blur-[80px] md:blur-[120px] -z-10 pointer-events-none" />
-          <div className="absolute bottom-[20%] right-[-5%] md:right-[10%] w-72 h-72 md:w-[500px] md:h-[500px] bg-purple-600/20 rounded-full blur-[90px] md:blur-[150px] -z-10 pointer-events-none" />
+          {/* Mobile version (Static to prevent lag on Safari/iOS) */}
+          <div className="absolute block md:hidden top-[20%] left-[15%] w-72 h-72 bg-primary/30 rounded-full blur-[80px] z-0 pointer-events-none" />
+          <div className="absolute block md:hidden bottom-[20%] right-[-5%] w-72 h-72 bg-purple-600/30 rounded-full blur-[90px] z-0 pointer-events-none" />
+
+          {/* Desktop version (Animated) */}
+          <motion.div 
+            animate={{ 
+              y: [0, -30, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="hidden md:block absolute top-[20%] left-[15%] w-96 h-96 bg-primary/20 rounded-full blur-[120px] z-0 pointer-events-none" 
+          />
+          <motion.div 
+            animate={{ 
+              y: [0, 40, 0],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="hidden md:block absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[150px] z-0 pointer-events-none" 
+          />
 
           <div className="container px-4 md:px-6 relative z-10 w-full max-w-7xl mx-auto">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 items-center">
@@ -506,7 +524,7 @@ export default function LandingPage() {
                     Aprenda música de forma dinâmica
                   </h1>
                   <p className="max-w-[600px] text-gray-400 text-lg md:text-xl mx-auto lg:mx-0 font-light leading-relaxed">
-                    A <strong>Nota Dentro</strong> é a plataforma gamificada definitiva para estudos livres, Testes de Habilidade Específica (THE) e Carreiras Militares. Domine os fundamentos teóricos de forma prática e interativa.
+                     <strong>Nota Dentro</strong> é a plataforma gamificada definitiva para estudos livres, Testes de Habilidade Específica (THE) e Carreiras Militares. Domine os fundamentos teóricos de forma prática e interativa.
                   </p>
                 </motion.div>
                 
@@ -535,10 +553,10 @@ export default function LandingPage() {
                 className="relative w-full max-w-md mx-auto lg:ml-auto"
               >
                 <div className="absolute -inset-1 bg-gradient-to-tr from-primary/30 to-purple-600/30 rounded-3xl blur-2xl -z-10 animate-pulse"></div>
-                <Card className="relative bg-[#1a1a1c] border-zinc-800/60 shadow-[0_0_50px_-12px_rgba(0,0,0,0.8)] rounded-xl overflow-hidden">
+                <Card className="relative bg-zinc-900/60 backdrop-blur-2xl border-zinc-800/60 shadow-[0_0_50px_-12px_rgba(0,0,0,0.8)] rounded-xl overflow-hidden">
                   <CardHeader className="text-left pb-4 pt-8">
                     <CardTitle className="text-2xl font-semibold text-white">
-                      {authStep === 'initial' ? 'Welcome to Nota Dentro' : authStep === 'login' ? 'Welcome Back' : 'Check your email'}
+                      {authStep === 'initial' ? 'Bem-vindo ao Nota Dentro' : authStep === 'login' ? 'Bem-vindo de volta' : 'Verifique seu e-mail'}
                     </CardTitle>
                     {authStep === 'magic_link_sent' && (
                       <CardDescription className="text-zinc-400 mt-2">
@@ -558,7 +576,7 @@ export default function LandingPage() {
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                             <path d="M1 1h22v22H1z" fill="none" />
                           </svg>
-                          Continue with Google
+                          Continuar com o Google
                         </Button>
                         
                         <div className="relative my-6">
@@ -566,12 +584,12 @@ export default function LandingPage() {
                             <span className="w-full border-t border-zinc-800" />
                           </div>
                           <div className="relative flex justify-center text-xs">
-                            <span className="bg-[#1a1a1c] px-4 text-zinc-500">OR</span>
+                            <span className="bg-[#1a1a1c] px-4 text-zinc-500">OU</span>
                           </div>
                         </div>
 
                         <div>
-                          <label className="text-sm text-zinc-400 mb-1.5 block font-medium">Email</label>
+                          <label className="text-sm text-zinc-400 mb-1.5 block font-medium">E-mail</label>
                           <Input 
                             value={authEmail}
                             onChange={(e) => setAuthEmail(e.target.value)}
@@ -580,13 +598,13 @@ export default function LandingPage() {
                             placeholder="seu@email.com" 
                             onKeyDown={(e) => e.key === 'Enter' && handleEmailContinue()}
                           />
-                          <Button onClick={handleEmailContinue} disabled={isChecking} className="w-full bg-[#f97316] text-white hover:bg-[#ea580c] font-semibold text-base h-12 rounded-full transition-all">
-                            {isChecking ? 'Verificando...' : 'Continue'}
+                          <Button onClick={handleEmailContinue} disabled={isChecking} className="w-full bg-primary text-black hover:bg-primary/90 font-semibold text-base h-12 rounded-full transition-all shadow-[0_0_15px_rgba(201,168,17,0.4)] hover:shadow-[0_0_25px_rgba(201,168,17,0.6)] hover:-translate-y-0.5">
+                            {isChecking ? 'Verificando...' : 'Continuar'}
                           </Button>
                         </div>
                         
                         <p className="text-[11px] text-zinc-500 mt-6 leading-relaxed">
-                          By signing up, I agree to the Terms of Use, including the Independent Contractor and Arbitration Agreements, and acknowledge the Privacy Policy.
+                          Ao se cadastrar ou fazer login, você concorda com nossos Termos de Uso e aceita nossas Políticas de Privacidade e Tratamento de Dados.
                         </p>
                       </div>
                     )}
@@ -594,7 +612,7 @@ export default function LandingPage() {
                     {authStep === 'login' && (
                       <form onSubmit={handlePasswordLogin} className="space-y-4">
                         <div>
-                          <label className="text-sm text-zinc-400 mb-1.5 block font-medium">Email</label>
+                          <label className="text-sm text-zinc-400 mb-1.5 block font-medium">E-mail</label>
                           <Input 
                             value={authEmail}
                             disabled
@@ -602,7 +620,7 @@ export default function LandingPage() {
                           />
                         </div>
                         <div>
-                          <label className="text-sm text-zinc-400 mb-1.5 block font-medium">Password</label>
+                          <label className="text-sm text-zinc-400 mb-1.5 block font-medium">Senha</label>
                           <Input 
                             value={authPassword}
                             onChange={(e) => setAuthPassword(e.target.value)}
@@ -612,8 +630,8 @@ export default function LandingPage() {
                             autoFocus
                           />
                         </div>
-                        <Button type="submit" disabled={isChecking} className="w-full bg-[#f97316] text-white hover:bg-[#ea580c] font-semibold text-base h-12 rounded-full mt-2">
-                          {isChecking ? 'Entrando...' : 'Log In'}
+                        <Button type="submit" disabled={isChecking} className="w-full bg-primary text-black hover:bg-primary/90 font-semibold text-base h-12 rounded-full mt-2 transition-all shadow-[0_0_15px_rgba(201,168,17,0.4)] hover:shadow-[0_0_25px_rgba(201,168,17,0.6)] hover:-translate-y-0.5">
+                          {isChecking ? 'Entrando...' : 'Entrar'}
                         </Button>
                         <Button type="button" variant="link" onClick={() => setAuthStep('initial')} className="w-full text-zinc-400 text-sm">
                           Voltar
