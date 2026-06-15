@@ -38,12 +38,6 @@ export async function getPersonalizedRecommendations(): Promise<PersonalizedLess
         { lessonId: '3', score: 55, completionTime: 600 },
     ];
 
-    const input: PersonalizedLessonRecommendationsInput = {
-        userId: 'user123',
-        learningHistory,
-        availableLessons,
-    };
-
     try {
         const completedIds = new Set(learningHistory.map(item => item.lessonId));
 

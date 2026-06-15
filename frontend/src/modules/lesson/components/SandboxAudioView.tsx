@@ -23,6 +23,21 @@ export function SandboxAudioView({ data, isCompleted, onSuccess }: SandboxAudioV
   const oscillatorRef = useRef<OscillatorNode | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
 
+  function stopAudio() {
+    if (oscillatorRef.current && gainNodeRef.current && audioCtxRef.current) {
+      const ct = audioCtxRef.current.currentTime;
+      // Smooth release
+      gainNodeRef.current.gain.cancelScheduledValues(ct);
+      gainNodeRef.current.gain.setValueAtTime(gainNodeRef.current.gain.value, ct);
+      gainNodeRef.current.gain.linearRampToValueAtTime(0, ct + 0.1);
+      
+      oscillatorRef.current.stop(ct + 0.1);
+      
+      oscillatorRef.current = null;
+    }
+    setIsPlaying(false);
+  }
+
   useEffect(() => {
     // Cleanup on unmount
     return () => {
@@ -81,20 +96,7 @@ export function SandboxAudioView({ data, isCompleted, onSuccess }: SandboxAudioV
     setHasInteracted(true);
   };
 
-  const stopAudio = () => {
-    if (oscillatorRef.current && gainNodeRef.current && audioCtxRef.current) {
-      const ct = audioCtxRef.current.currentTime;
-      // Smooth release
-      gainNodeRef.current.gain.cancelScheduledValues(ct);
-      gainNodeRef.current.gain.setValueAtTime(gainNodeRef.current.gain.value, ct);
-      gainNodeRef.current.gain.linearRampToValueAtTime(0, ct + 0.1);
-      
-      oscillatorRef.current.stop(ct + 0.1);
-      
-      oscillatorRef.current = null;
-    }
-    setIsPlaying(false);
-  };
+;
 
   const toggleAudio = () => {
     if (isPlaying) {
