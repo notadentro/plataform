@@ -11,16 +11,9 @@ interface FillBlanksProps {
 }
 
 export function FillBlanks({ data, onComplete }: FillBlanksProps) {
-  const [filledBlanks, setFilledBlanks] = useState<(string | null)[]>(new Array(data.blanks.length).fill(null));
-  const [availableOptions, setAvailableOptions] = useState<string[]>([]);
+  const [filledBlanks, setFilledBlanks] = useState<(string | null)[]>(() => new Array(data.blanks.length).fill(null));
+  const [availableOptions, setAvailableOptions] = useState<string[]>(() => [...data.options].sort(() => Math.random() - 0.5));
   const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    // Shuffle options initially
-    setAvailableOptions([...data.options].sort(() => Math.random() - 0.5));
-    setFilledBlanks(new Array(data.blanks.length).fill(null));
-    setIsError(false);
-  }, [data]);
 
   const handleOptionClick = (option: string) => {
     const firstEmptyIndex = filledBlanks.indexOf(null);
@@ -55,32 +48,36 @@ export function FillBlanks({ data, onComplete }: FillBlanksProps) {
   };
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     if (!filledBlanks.includes(null)) {
       // All filled, let's check!
       const isCorrect = filledBlanks.every((val, idx) => val === data.blanks[idx]);
       
       if (isCorrect) {
-        setTimeout(() => onComplete(true), 500);
+        timeoutId = setTimeout(() => onComplete(true), 500);
       } else {
         setIsError(true);
         // Return wrong ones after a delay
-        setTimeout(() => {
-          const newFilled = [...filledBlanks];
-          const returnedOptions: string[] = [];
-          
-          newFilled.forEach((val, idx) => {
-            if (val !== data.blanks[idx]) {
-              if (val) returnedOptions.push(val);
-              newFilled[idx] = null;
-            }
+        timeoutId = setTimeout(() => {
+          setFilledBlanks(prev => {
+            const newFilled = [...prev];
+            const returnedOptions: string[] = [];
+            
+            newFilled.forEach((val, idx) => {
+              if (val !== data.blanks[idx]) {
+                if (val) returnedOptions.push(val);
+                newFilled[idx] = null;
+              }
+            });
+            
+            setAvailableOptions(opts => [...opts, ...returnedOptions]);
+            return newFilled;
           });
-          
-          setFilledBlanks(newFilled);
-          setAvailableOptions(prev => [...prev, ...returnedOptions]);
           setIsError(false);
         }, 1200);
       }
     }
+    return () => clearTimeout(timeoutId);
   }, [filledBlanks, data.blanks, onComplete]);
 
   // Parse text into segments

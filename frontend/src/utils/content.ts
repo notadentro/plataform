@@ -107,7 +107,7 @@ export async function getDynamicCurriculum(): Promise<Trail[]> {
       if (livresTrail.courses.length === 0) {
         livresTrail.courses.push({
           id: 'curso-livre-geral',
-          title: 'Aulas Avulsas',
+          title: 'Teoria Musical',
           description: 'Aulas e desafios criados pela comunidade e professores.',
           icon: 'BookOpen',
           modules: [

@@ -17,46 +17,51 @@ interface Card {
 }
 
 export function MemoryGame({ data, onComplete }: MemoryGameProps) {
-  const [cards, setCards] = useState<Card[]>([]);
-  const [flippedIds, setFlippedIds] = useState<string[]>([]);
-  const [matchedMatchIds, setMatchedMatchIds] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    // Generate cards and shuffle
+  const [cards, setCards] = useState<Card[]>(() => {
     const newCards: Card[] = [];
     data.pairs.forEach((p, i) => {
       newCards.push({ id: `c-${i}-1`, matchId: `m-${i}`, text: p.item1 });
       newCards.push({ id: `c-${i}-2`, matchId: `m-${i}`, text: p.item2 });
     });
-    
-    // Simple shuffle
     newCards.sort(() => Math.random() - 0.5);
-    setCards(newCards);
-  }, [data]);
+    return newCards;
+  });
+  
+  const [flippedIds, setFlippedIds] = useState<string[]>([]);
+  const [matchedMatchIds, setMatchedMatchIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    let timeoutId1: NodeJS.Timeout;
+    let timeoutId2: NodeJS.Timeout;
+    
     if (flippedIds.length === 2) {
       const card1 = cards.find(c => c.id === flippedIds[0]);
       const card2 = cards.find(c => c.id === flippedIds[1]);
 
       if (card1 && card2 && card1.matchId === card2.matchId) {
         // Match!
-        const newMatched = new Set(matchedMatchIds);
-        newMatched.add(card1.matchId);
-        setMatchedMatchIds(newMatched);
+        setMatchedMatchIds(prev => {
+          const newMatched = new Set(prev);
+          newMatched.add(card1.matchId);
+          if (newMatched.size === data.pairs.length) {
+            timeoutId1 = setTimeout(() => onComplete(true), 600);
+          }
+          return newMatched;
+        });
         setFlippedIds([]);
-        
-        if (newMatched.size === data.pairs.length) {
-          setTimeout(() => onComplete(true), 600);
-        }
       } else {
         // Mismatch - wait then flip back
-        setTimeout(() => {
+        timeoutId2 = setTimeout(() => {
           setFlippedIds([]);
         }, 1000);
       }
     }
-  }, [flippedIds, cards, matchedMatchIds, data.pairs.length, onComplete]);
+    
+    return () => {
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+    };
+  }, [flippedIds, cards, data.pairs.length, onComplete]);
 
   const handleCardClick = (id: string) => {
     if (flippedIds.length === 2) return;
