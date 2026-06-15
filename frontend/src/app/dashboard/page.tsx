@@ -65,27 +65,40 @@ export default function DashboardPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {trails.length === 0 ? (
                               <p className="text-muted-foreground col-span-2">Carregando trilhas...</p>
-                            ) : trails.map(trail => (
-                            <Link href={`/dashboard/trail/${trail.id}`} key={trail.id} className="block group">
-                                <Card className="h-full border-2 border-brand-graphite/20 hover:border-[#2D8A5C] transition-all hover:shadow-[0_8px_0_0_#2D8A5C] hover:-translate-y-2 bg-background cursor-pointer flex flex-col">
-                                <CardHeader className="flex flex-row items-start gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-[#2D8A5C]/10 flex items-center justify-center text-[#2D8A5C] group-hover:bg-[#2D8A5C] group-hover:text-white transition-colors shrink-0">
-                                    {iconMap[trail.icon] || <Shield className="w-6 h-6" />}
-                                    </div>
-                                    <div className="flex-1">
-                                    <CardTitle className="text-xl font-bold font-headline leading-tight">{trail.title}</CardTitle>
-                                    <CardDescription className="text-sm mt-2 font-body">{trail.description}</CardDescription>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="mt-auto">
-                                    <div className="flex items-center text-[#2D8A5C] font-bold mt-2 font-headline text-sm">
-                                    <span>Ver Cursos ({trail.courses.length})</span>
-                                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                                    </div>
-                                </CardContent>
-                                </Card>
-                            </Link>
-                            ))}
+                            ) : (() => {
+                              const filteredTrails = trails.filter(trail => {
+                                if (!user?.onboardingData?.goal) return true;
+                                const goal = user.onboardingData.goal;
+                                if (goal === 'livre' && trail.id === 'livres') return true;
+                                if (goal === 'the' && trail.id === 'universidades') return true;
+                                if (['esa', 'eags', 'fuzileiros'].includes(goal) && trail.id === 'militares') return true;
+                                return false;
+                              });
+                              
+                              if (filteredTrails.length === 0) return <p className="text-muted-foreground col-span-2">Nenhuma trilha encontrada para o seu perfil.</p>;
+
+                              return filteredTrails.map(trail => (
+                                <Link href={`/dashboard/trail/${trail.id}`} key={trail.id} className="block group">
+                                    <Card className="h-full border-2 border-brand-graphite/20 hover:border-[#2D8A5C] transition-all hover:shadow-[0_8px_0_0_#2D8A5C] hover:-translate-y-2 bg-background cursor-pointer flex flex-col">
+                                    <CardHeader className="flex flex-row items-start gap-4">
+                                        <div className="w-14 h-14 rounded-2xl bg-[#2D8A5C]/10 flex items-center justify-center text-[#2D8A5C] group-hover:bg-[#2D8A5C] group-hover:text-white transition-colors shrink-0">
+                                        {iconMap[trail.icon] || <Shield className="w-6 h-6" />}
+                                        </div>
+                                        <div className="flex-1">
+                                        <CardTitle className="text-xl font-bold font-headline leading-tight">{trail.title}</CardTitle>
+                                        <CardDescription className="text-sm mt-2 font-body">{trail.description}</CardDescription>
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent className="mt-auto">
+                                        <div className="flex items-center text-[#2D8A5C] font-bold mt-2 font-headline text-sm">
+                                        <span>Ver Cursos ({trail.courses.length})</span>
+                                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                                        </div>
+                                    </CardContent>
+                                    </Card>
+                                </Link>
+                              ));
+                            })()}
                         </div>
                     </section>
                 </div>

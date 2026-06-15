@@ -11,8 +11,12 @@ interface MatchColumnsProps {
 }
 
 export function MatchColumns({ data, onComplete }: MatchColumnsProps) {
-  const [leftItems, setLeftItems] = useState<{ id: string; text: string }[]>([]);
-  const [rightItems, setRightItems] = useState<{ id: string; text: string }[]>([]);
+  const [leftItems, setLeftItems] = useState<{ id: string; text: string }[]>(() => 
+    data.pairs.map((p, i) => ({ id: `pair-${i}`, text: p.left })).sort(() => Math.random() - 0.5)
+  );
+  const [rightItems, setRightItems] = useState<{ id: string; text: string }[]>(() => 
+    data.pairs.map((p, i) => ({ id: `pair-${i}`, text: p.right })).sort(() => Math.random() - 0.5)
+  );
   
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [selectedRight, setSelectedRight] = useState<string | null>(null);
@@ -21,37 +25,34 @@ export function MatchColumns({ data, onComplete }: MatchColumnsProps) {
   const [errorPair, setErrorPair] = useState<{ left: string; right: string } | null>(null);
 
   useEffect(() => {
-    // Shuffle left and right independently
-    const left = data.pairs.map((p, i) => ({ id: `pair-${i}`, text: p.left })).sort(() => Math.random() - 0.5);
-    const right = data.pairs.map((p, i) => ({ id: `pair-${i}`, text: p.right })).sort(() => Math.random() - 0.5);
-    setLeftItems(left);
-    setRightItems(right);
-  }, [data]);
-
-  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
     if (selectedLeft && selectedRight) {
       // Check if they match
       if (selectedLeft === selectedRight) {
-        const newMatched = new Set(matchedPairs);
-        newMatched.add(selectedLeft);
-        setMatchedPairs(newMatched);
+        setMatchedPairs(prev => {
+          const newMatched = new Set(prev);
+          newMatched.add(selectedLeft);
+          if (newMatched.size === data.pairs.length) {
+            timeoutId = setTimeout(() => onComplete(true), 500);
+          }
+          return newMatched;
+        });
         setSelectedLeft(null);
         setSelectedRight(null);
-        
-        if (newMatched.size === data.pairs.length) {
-          setTimeout(() => onComplete(true), 500);
-        }
       } else {
         // Mismatch
         setErrorPair({ left: selectedLeft, right: selectedRight });
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
           setErrorPair(null);
           setSelectedLeft(null);
           setSelectedRight(null);
         }, 800); // flash red for 800ms
       }
     }
-  }, [selectedLeft, selectedRight, matchedPairs, data.pairs.length, onComplete]);
+    
+    return () => clearTimeout(timeoutId);
+  }, [selectedLeft, selectedRight, data.pairs.length, onComplete]);
 
   return (
     <div className="flex flex-col gap-6 md:gap-8 w-full">

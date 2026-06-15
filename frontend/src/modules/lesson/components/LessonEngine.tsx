@@ -74,6 +74,16 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
     }
   }, [showVictory]);
 
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // Fallback para mobile
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentIndex]);
+
   if (!currentStep && !showVictory) return null;
 
   // Check if current step can be bypassed
@@ -163,7 +173,10 @@ export function LessonEngine({ lesson, nextLessonId, onClose }: LessonEngineProp
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 flex flex-col items-center px-4 py-2 md:p-12 overflow-y-auto overflow-x-hidden">
+      <div 
+        ref={scrollRef}
+        className="flex-1 flex flex-col items-center px-4 py-2 md:p-12 overflow-y-auto overflow-x-hidden"
+      >
         <AnimatePresence mode="wait">
           <motion.div 
             key={currentIndex}
